@@ -17,7 +17,7 @@ DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { MessageCircle, Heart, Share2, Bookmark, MoveVertical as MoreVertical, Eye, Repeat2, FileText, DollarSign } from 'lucide-react';
+import { MessageCircle, Heart, Share2, Bookmark, MoreHorizontal, Eye, Repeat2, FileText, DollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
@@ -231,7 +231,7 @@ locale: ar,
 <DropdownMenu>
 <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-<MoreVertical className="h-4 w-4" />
+<MoreHorizontal className="h-4 w-4" />
 </Button>
 </DropdownMenuTrigger>
 
