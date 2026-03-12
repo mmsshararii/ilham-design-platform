@@ -90,10 +90,10 @@ export function PostCard({ post }: PostCardProps) {
 
   const fetchAttachments = async () => {
     const { data, error } = await supabase
-      .from('post_attachments')
-      .select('url, order')
-      .eq('post_id', post.id)
-      .order('order', { ascending: true });
+  .from('post_attachments')
+  .select('url, sort_order')
+  .eq('post_id', post.id)
+  .order('sort_order', { ascending: true });
 
     if (error) {
       console.error('Error fetching attachments:', error);
