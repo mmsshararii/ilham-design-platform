@@ -105,7 +105,10 @@ setAttachments(formatted);
 };
 
 const handlePostClick = () => {
-router.push(`/post/${post.id}`);
+import { encodeId } from '@/lib/short-id';
+
+const short = encodeId(post.short_id);
+router.push(`/i${short}`);
 };
 
 const handleLike = async (e: React.MouseEvent) => {
