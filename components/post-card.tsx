@@ -88,21 +88,16 @@ export function PostCard({ post }: PostCardProps) {
     setIsFavorited(!!userFavRes.data);
   };
 
-  const fetchAttachments = async () => {
-    const { data, error } = await supabase
-  .from('post_attachments')
-  .select('url, sort_order')
-  .eq('post_id', post.id)
-  .order('sort_order', { ascending: true });
+const fetchAttachments = () => {
+  if (Array.isArray(post.attachments)) {
+    const formatted = post.attachments.map((url, index) => ({
+      url,
+      order: index
+    }));
 
-    if (error) {
-      console.error('Error fetching attachments:', error);
-    }
-
-    if (data) {
-      setAttachments(data);
-    }
-  };
+    setAttachments(formatted);
+  }
+};
 
   const handlePostClick = () => {
     router.push(`/post/${post.id}`);
