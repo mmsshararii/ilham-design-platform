@@ -323,7 +323,62 @@ className="flex items-center gap-2 p-2.5 bg-purple-500/10 hover:bg-purple-500/20
 </div>
 </div>
 )}
+<div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border">
 
+  <div className="flex items-center gap-4">
+    <span className="flex items-center gap-1">
+      <Repeat2 className="h-3.5 w-3.5" />
+      {repostCount}
+    </span>
+
+    <span className="flex items-center gap-1">
+      <MessageCircle className="h-3.5 w-3.5" />
+      {commentCount}
+    </span>
+
+    <span className="flex items-center gap-1">
+      <Heart className="h-3.5 w-3.5" />
+      {likeCount}
+    </span>
+
+    <span className="flex items-center gap-1">
+      <Eye className="h-3.5 w-3.5" />
+      {viewCount}
+    </span>
+  </div>
+
+  <div className="flex items-center gap-1">
+
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleShare}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <Share2 className="h-4 w-4" />
+    </Button>
+
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleFavorite}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <Bookmark className={`h-4 w-4 ${isFavorited ? 'fill-purple-500 text-purple-500' : ''}`} />
+    </Button>
+
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleLike}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <Heart className={`h-4 w-4 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+    </Button>
+
+  </div>
+
+</div>
 </CardContent>
 </Card>
 );
