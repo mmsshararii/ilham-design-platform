@@ -1,5 +1,5 @@
 'use client';
-
+import { decodeId } from '@/lib/short-id';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -18,7 +18,8 @@ export default function PostDetailPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const params = useParams();
-  const postId = params.id as string;
+  const code = (params.id as string).replace('i','');
+  const postNumber = decodeId(code);
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +47,7 @@ export default function PostDetailPage() {
         *,
         profiles (*)
       `)
-      .eq('id', postId)
+      .eq('short_id', postNumber)
       .maybeSingle();
 
     if (data) {
