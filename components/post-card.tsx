@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { Post } from '@/lib/supabase';
 import { supabase } from '@/lib/supabase';
@@ -51,6 +52,8 @@ onLikesUpdate?: (count: number) => void;
 export function PostCard({ post }: PostCardProps) {
 const router = useRouter();
 const { user } = useAuth();
+const pathname = usePathname();
+const isPostPage = pathname.startsWith('/post/'); 
 const [likeCount, setLikeCount] = useState(0);
 const [isLiked, setIsLiked] = useState(false);
 const [isFavorited, setIsFavorited] = useState(false);
@@ -296,12 +299,12 @@ locale: ar,
     ))}
   </div>
 )}
-{attachments.length > 0 && (
+{isPostPage && attachments.length > 0 && (
 
 <div className="space-y-2">
 <p className="text-xs font-semibold text-muted-foreground">المرفقات</p>
 
-<div className="space-y-1.5">
+<div className="flex gap-[5%] flex-wrap">
 {attachments.map((att, index) => (
 <a
 key={att.url}
