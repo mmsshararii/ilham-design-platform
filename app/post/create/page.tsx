@@ -112,59 +112,46 @@ export default function CreatePostPage() {
     setImages(images.filter((img) => img !== url));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    if (description.length > 300) {
-      setError('الوصف يجب ألا يتجاوز 300 حرف');
-      setLoading(false);
-      return;
-    }
+  if (description.length > 300) {
+    setError('الوصف يجب ألا يتجاوز 300 حرف');
+    setLoading(false);
+    return;
+  }
 
-    if ((postType === 'design_offer' || postType === 'design_request') && !commissionAgreed) {
-      setError('يجب الموافقة على دفع عمولة 20٪ للموقع لنشر هذا النوع من المنشورات');
-      setLoading(false);
-      return;
-    }
+  if ((postType === 'design_offer' || postType === 'design_request') && !commissionAgreed) {
+    setError('يجب الموافقة على دفع عمولة 20٪ للموقع لنشر هذا النوع من المنشورات');
+    setLoading(false);
+    return;
+  }
 
-    const { data: postData, error: insertError } = await supabase.from('posts').insert({
+  const { error: insertError } = await supabase
+    .from('posts')
+    .insert({
       user_id: user.id,
       post_type: postType,
       description,
       hashtags,
       images,
+      attachments, // ← هنا يتم حفظ المرفقات مباشرة
       price: price ? parseFloat(price) : null,
       price_negotiable: priceNegotiable,
       commission_agreed: commissionAgreed,
-    }).select().single();
+    });
 
-    if (insertError) {
-      setError(insertError.message);
-      setLoading(false);
-      return;
-    }
+  if (insertError) {
+    setError(insertError.message);
+    setLoading(false);
+    return;
+  }
 
-    if (attachments.length > 0 && postData) {
-      const attachmentRecords = attachments.map((url, index) => ({
-        post_id: postData.id,
-        url,
-        order: index + 1,
-      }));
-
-      const { error: attachmentError } = await supabase
-        .from('post_attachments')
-        .insert(attachmentRecords);
-
-      if (attachmentError) {
-        console.error('Error inserting attachments:', attachmentError);
-      }
-    }
-
-    toast.success('تم نشر المنشور بنجاح');
-    router.push('/');
-  };
+  toast.success('تم نشر المنشور بنجاح');
+  router.push('/');
+};
 
   return (
     <div className="min-h-screen bg-background">
