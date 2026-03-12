@@ -253,7 +253,49 @@ locale: ar,
 <p className="text-sm leading-relaxed whitespace-pre-wrap line-clamp-3">
 {post.description}
 </p>
+{(post.price !== null && post.price !== undefined) && (
+  <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+    <DollarSign className="h-4 w-4 text-purple-400" />
+    <div className="flex-1">
+      <p className="text-sm font-semibold text-purple-300">
+        {post.post_type === 'design_offer' ? 'السعر:' : 'الميزانية:'} {post.price} ريال
+      </p>
+      {post.price_negotiable && (
+        <p className="text-xs text-purple-400">قابل للتفاوض</p>
+      )}
+    </div>
+  </div>
+)}
 
+{images.length > 0 && (
+  <div className="space-y-2">
+    {mainImage && (
+      <div className="relative rounded-lg overflow-hidden bg-muted aspect-video">
+        <img
+          src={mainImage}
+          alt="Post image"
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    )}
+  </div>
+)}
+
+{post.hashtags && post.hashtags.length > 0 && (
+  <div className="flex flex-wrap gap-1.5">
+    {post.hashtags.map((tag, index) => (
+      <Link
+        key={index}
+        href={`/hashtag/${encodeURIComponent(tag)}`}
+        onClick={(e) => e.stopPropagation()}
+        className="text-xs text-purple-400 hover:text-purple-300"
+      >
+        #{tag}
+      </Link>
+    ))}
+  </div>
+)}
 {attachments.length > 0 && (
 
 <div className="space-y-2">
