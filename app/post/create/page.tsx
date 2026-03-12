@@ -128,7 +128,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setLoading(false);
     return;
   }
-
+console.log("attachments:", attachments);
   const { error: insertError } = await supabase
     .from('posts')
     .insert({
