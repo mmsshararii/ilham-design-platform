@@ -1,5 +1,5 @@
 'use client';
-
+import { encodeId } from '@/lib/short-id';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
@@ -37,16 +37,17 @@ general: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
 };
 
 interface PostCardProps {
-post: Post & {
-price?: number | null;
-price_negotiable?: boolean;
-profiles?: {
-username: string;
-avatar_url?: string;
-display_name?: string;
-};
-};
-onLikesUpdate?: (count: number) => void;
+  post: (Post & {
+    short_id: number | string;
+    price?: number | null;
+    price_negotiable?: boolean;
+    profiles?: {
+      username: string;
+      avatar_url?: string;
+      display_name?: string;
+    };
+  });
+  onLikesUpdate?: (count: number) => void;
 }
 
 export function PostCard({ post }: PostCardProps) {
@@ -105,10 +106,8 @@ setAttachments(formatted);
 };
 
 const handlePostClick = () => {
-import { encodeId } from '@/lib/short-id';
-
-const short = encodeId(post.short_id);
-router.push(`/i${short}`);
+const short = encodeId(Number((post as any).short_id));
+router.push(`/i/${short}`);
 };
 
 const handleLike = async (e: React.MouseEvent) => {

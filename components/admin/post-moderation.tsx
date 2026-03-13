@@ -11,20 +11,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Eye, Trash2, EyeOff, Loader as Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Post } from '@/lib/supabase';
 
-interface Post {
-  id: string;
-  user_id: string;
-  post_type: string;
-  description: string;
-  hashtags: string[];
-  images: any;
-  is_hidden: boolean;
-  created_at: string;
-  profiles: {
-    username: string;
-  };
-}
 
 interface PostModerationProps {
   adminId: string;
@@ -133,11 +121,11 @@ export function PostModeration({ adminId }: PostModerationProps) {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-base flex items-center gap-2">
-              @{post.profiles.username}
-              <Badge variant="secondary" className="text-xs">
-                {getPostTypeLabel(post.post_type)}
-              </Badge>
-            </CardTitle>
+            @{post.profiles?.username}
+            <Badge variant="secondary" className="text-xs">
+          {getPostTypeLabel(post.post_type)}
+           </Badge>
+           </CardTitle>
             <p className="text-xs text-muted-foreground">
               {new Date(post.created_at).toLocaleDateString('ar', {
                 year: 'numeric',

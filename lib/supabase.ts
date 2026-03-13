@@ -32,15 +32,19 @@ export type Profile = {
 };
 
 export type Post = {
-  id: string;
-  user_id: string;
-  post_type: 'my_design' | 'design_offer' | 'design_request' | 'general';
-  description: string;
-  hashtags: string[];
-  images: string[];
-  created_at: string;
-  updated_at: string;
-  profiles?: Profile;
+  id: string
+  short_id: number
+  user_id: string
+  post_type: 'my_design' | 'design_offer' | 'design_request' | 'general'
+  description: string
+  hashtags: string[]
+  images: string[]
+  attachments?: string[]
+  created_at: string
+  profiles?: Profile
+  price?: number | null
+  price_negotiable?: boolean
+  is_hidden?: boolean
 };
 
 export type Comment = {
