@@ -1,48 +1,41 @@
-'use client';
+'use client'
 
-import { decodeId } from '@/lib/short-id';
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
-import PostDetailPage from '@/app/post/[id]/page';
-import { Loader2 } from "lucide-react";
+import { useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+import { Loader2 } from "lucide-react"
 
 export default function ShortPostPage() {
 
-  const params = useParams();
-  const code = params.id as string;
-
-  const [postId, setPostId] = useState<string | null>(null);
+  const params = useParams()
+  const router = useRouter()
+  const code = params.id as string
 
   useEffect(() => {
 
     const loadPost = async () => {
 
-      const shortId = decodeId(code);
+      const shortId = decodeId(code)
 
       const { data } = await supabase
         .from('posts')
         .select('id')
         .eq('short_id', shortId)
-        .maybeSingle();
+        .maybeSingle()
 
       if (data) {
-        setPostId(data.id);
+        router.replace(`/post/${data.id}`)
       }
 
-    };
+    }
 
-    loadPost();
+    loadPost()
 
-  }, [code]);
+  }, [code, router])
 
-  if (!postId) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
-      </div>
-    );
-  }
-
-  return <PostDetailPage params={{ id: postId }} />;
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+    </div>
+  )
 }
