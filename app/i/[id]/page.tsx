@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import { supabase, Post } from '@/lib/supabase';
 import { Navbar } from '@/components/navbar';
 import { PostCard } from '@/components/post-card';
-
+import { Loader2 } from "lucide-react";
 export default function ShortPostPage() {
 
   const params = useParams();
@@ -40,8 +40,6 @@ export default function ShortPostPage() {
     loadPost();
 
   }, [code]);
-
-import { Loader2 } from "lucide-react";
 
 if (loading) {
   return (
