@@ -2,12 +2,14 @@ import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { decodeId } from "@/lib/short-id";
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const short = params.id;
+export default async function Page({ params }: any) {
+
+  const short = String(params?.id ?? "");
+
+  if (!short) {
+    return <div style={{ padding: 40 }}>رابط غير صالح</div>;
+  }
+
 
   try {
     // فك الترميز من الرابط
