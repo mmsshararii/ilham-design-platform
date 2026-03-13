@@ -1,43 +1,42 @@
-'use client';
+'use client'
 
-import { decodeId } from '@/lib/short-id';
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { supabase, Post } from '@/lib/supabase';
-import PostDetailPage from '@/app/post/[id]/page';
+import { useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { decodeId } from '@/lib/short-id'
+import { supabase } from '@/lib/supabase'
 
 export default function ShortPostPage() {
 
-  const params = useParams();
-  const code = params.id as string;
-
-  const [post, setPost] = useState<Post | null>(null);
+  const params = useParams()
+  const router = useRouter()
 
   useEffect(() => {
 
-    const loadPost = async () => {
+    const load = async () => {
 
-      const shortId = decodeId(code);
+      const code = params.id as string
+      const shortId = decodeId(code)
 
       const { data } = await supabase
         .from('posts')
-        .select('*')
+        .select('id')
         .eq('short_id', shortId)
-        .maybeSingle();
+        .single()
 
       if (data) {
-        setPost(data);
+        router.replace(`/post/${data.id}`)
       }
 
-    };
+    }
 
-    loadPost();
+    load()
 
-  }, [code]);
+  }, [])
 
-  if (!post) {
-    return <div style={{ padding: 40 }}>جاري التحميل...</div>;
-  }
+  return (
+    <div style={{padding:40}}>
+      جاري فتح المنشور...
+    </div>
+  )
 
-  return <PostDetailPage />;
 }
