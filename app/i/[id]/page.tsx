@@ -10,6 +10,7 @@ export default function ShortPostPage() {
 
   const params = useParams()
   const router = useRouter()
+
   const code = params.id as string
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function ShortPostPage() {
         .eq('short_id', shortId)
         .maybeSingle()
 
-      if (data) {
+      if (data?.id) {
         router.replace(`/post/${data.id}`)
       }
 
