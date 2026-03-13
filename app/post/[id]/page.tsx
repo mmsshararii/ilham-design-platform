@@ -36,11 +36,11 @@ export default function PostDetailPage() {
     }
   }, [user, authLoading, router]);
 
-  useEffect(() => {
-    if (user && postNumber) {
-      fetchPost();
-    }
-  }, [user, postNumber]);
+ useEffect(() => {
+  if (user && postId) {
+    fetchPost();
+  }
+}, [user, postId]);
 
   useEffect(() => {
     if (post?.id) {
