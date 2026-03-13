@@ -14,22 +14,24 @@ export default async function Page({
     const shortId = decodeId(short);
 
     // البحث عن المنشور
-    const { data, error } = await supabase
-      .from("posts")
-      .select("id")
-      .eq("short_id", shortId)
-      .single();
+const { data } = await supabase
+  .from("posts")
+  .select("id")
+  .eq("short_id", shortId)
+  .limit(1);
 
-    if (error || !data) {
-      return (
-        <div style={{ padding: 40 }}>
-          المنشور غير موجود
-        </div>
-      );
-    }
+const post = data?.[0];
+
+if (!post) {
+  return (
+    <div style={{ padding: 40 }}>
+      المنشور غير موجود
+    </div>
+  );
+}
 
     // تحويل المستخدم إلى صفحة المنشور الحقيقية
-    redirect(`/post/${data.id}`);
+    redirect(`/post/${post.id}`);
   } catch (e) {
     return (
       <div style={{ padding: 40 }}>
