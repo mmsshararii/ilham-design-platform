@@ -1,16 +1,18 @@
 'use client'
 
 import { decodeId } from '@/lib/short-id'
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { Loader2 } from "lucide-react"
+import PostDetailPage from '@/app/post/[id]/page'
+import { Loader2 } from 'lucide-react'
 
 export default function ShortPostPage() {
 
   const params = useParams()
-  const router = useRouter()
   const code = params.id as string
+
+  const [postId, setPostId] = useState<string | null>(null)
 
   useEffect(() => {
 
@@ -25,20 +27,23 @@ export default function ShortPostPage() {
         .maybeSingle()
 
       if (data?.id) {
-        console.log("SHORT CODE:", code)
-        console.log("POST UUID:", data?.id)
-        router.push(`/post/${data.id}`)
+        setPostId(data.id)
       }
 
     }
 
     loadPost()
 
-  }, [code, router])
+  }, [code])
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
-    </div>
-  )
+  if (!postId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+      </div>
+    )
+  }
+
+  return <PostDetailPage params={{ id: postId }} />
+
 }
