@@ -1,42 +1,60 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { decodeId } from '@/lib/short-id'
-import { supabase } from '@/lib/supabase'
+import { decodeId } from '@/lib/short-id';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { supabase, Post } from '@/lib/supabase';
+import { Navbar } from '@/components/navbar';
+import { PostCard } from '@/components/post-card';
 
 export default function ShortPostPage() {
 
-  const params = useParams()
-  const router = useRouter()
+  const params = useParams();
+  const code = params.id as string;
+
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
-    const load = async () => {
+    const loadPost = async () => {
 
-      const code = params.id as string
-      const shortId = decodeId(code)
+      const shortId = decodeId(code);
 
       const { data } = await supabase
         .from('posts')
-        .select('id')
+        .select(`
+          *,
+          profiles (*)
+        `)
         .eq('short_id', shortId)
-        .single()
+        .maybeSingle();
 
       if (data) {
-        router.replace(`/post/${data.id}`)
+        setPost(data);
       }
 
-    }
+      setLoading(false);
+    };
 
-    load()
+    loadPost();
 
-  }, [])
+  }, [code]);
+
+  if (loading) {
+    return <div style={{padding:40}}>جاري تحميل المنشور...</div>;
+  }
+
+  if (!post) {
+    return <div style={{padding:40}}>المنشور غير موجود</div>;
+  }
 
   return (
-    <div style={{padding:40}}>
-      جاري فتح المنشور...
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="max-w-2xl mx-auto p-4">
+        <PostCard post={post} />
+      </main>
     </div>
-  )
-
+  );
 }
