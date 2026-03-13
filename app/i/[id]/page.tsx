@@ -1,5 +1,6 @@
 'use client'
 
+import { decodeId } from '@/lib/short-id'
 import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'

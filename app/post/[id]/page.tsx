@@ -1,6 +1,5 @@
 'use client';
 
-import { decodeId } from '@/lib/short-id';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
