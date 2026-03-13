@@ -39,5 +39,5 @@ export default function ShortPostPage() {
     return <div style={{ padding: 40 }}>جاري التحميل...</div>;
   }
 
-  return <PostDetailPage postId={post.id} />;
+  return <PostDetailPage />;
 }
