@@ -20,8 +20,7 @@ export default function PostDetailPage() {
   const router = useRouter();
   const params = useParams();
 
-  const code = params.id as string;
-  const postNumber = decodeId(code);
+  const postId = params.id as string;
 
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -50,21 +49,21 @@ export default function PostDetailPage() {
   }, [post]);
 
   const fetchPost = async () => {
-    const { data } = await supabase
-      .from('posts')
-      .select(`
-        *,
-        profiles (*)
-      `)
-      .eq('short_id', postNumber)
-      .maybeSingle();
+  const { data } = await supabase
+    .from('posts')
+    .select(`
+      *,
+      profiles (*)
+    `)
+    .eq('id', postId)
+    .maybeSingle();
 
-    if (data) {
-      setPost(data);
-    }
+  if (data) {
+    setPost(data);
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   const fetchComments = async () => {
     if (!post?.id) return;
