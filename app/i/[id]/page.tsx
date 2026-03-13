@@ -7,6 +7,7 @@ import { supabase, Post } from '@/lib/supabase';
 import { Navbar } from '@/components/navbar';
 import { PostCard } from '@/components/post-card';
 import { Loader2 } from "lucide-react";
+import PostDetailPage from '@/app/post/[id]/page'
 export default function ShortPostPage() {
 
   const params = useParams();
@@ -57,7 +58,7 @@ if (loading) {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="max-w-2xl mx-auto p-4">
-        <PostCard post={post} />
+        <PostDetailPage />
       </main>
     </div>
   );
