@@ -41,9 +41,15 @@ export default function ShortPostPage() {
 
   }, [code]);
 
-  if (loading) {
-    return <div style={{padding:40}}>جاري تحميل المنشور...</div>;
-  }
+import { Loader2 } from "lucide-react";
+
+if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+    </div>
+  );
+}
 
   if (!post) {
     return <div style={{padding:40}}>المنشور غير موجود</div>;
