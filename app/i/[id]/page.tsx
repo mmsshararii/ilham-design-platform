@@ -27,7 +27,7 @@ export default function ShortPostPage() {
       if (data?.id) {
         console.log("SHORT CODE:", code)
         console.log("POST UUID:", data?.id)
-        router.replace(`/post/${data.id}`)
+        router.push(`/post/${data.id}`)
       }
 
     }
