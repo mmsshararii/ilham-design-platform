@@ -20,7 +20,7 @@ export default function PostDetailPage() {
   const router = useRouter();
   const params = useParams();
 
-  const code = (params.id as string).replace('i', '');
+  const code = params.id as string;
   const postNumber = decodeId(code);
 
   const [post, setPost] = useState<Post | null>(null);
