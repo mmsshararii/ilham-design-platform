@@ -68,11 +68,11 @@ const mainImage = images[0];
 const thumbnails = images.slice(1);
 
 useEffect(() => {
-if (user && post.id) {
+if (post.id) {
 fetchEngagementData();
 }
 fetchAttachments();
-}, [user, post.id]);
+}, [post.id]);
 
 const fetchEngagementData = async () => {
 const [likesRes, commentsRes, viewsRes, repostsRes, userLikeRes, userFavRes] = await Promise.all([
