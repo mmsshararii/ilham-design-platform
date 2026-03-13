@@ -82,9 +82,12 @@ export default function SignupPage() {
     }
 
     const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+  email,
+  password,
+  options: {
+    emailRedirectTo: 'https://www.ilham.me/auth/callback'
+  }
+});
 
     if (authError) {
       setError(authError.message);
