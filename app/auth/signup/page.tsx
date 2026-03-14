@@ -44,76 +44,62 @@ export default function SignupPage() {
     return () => clearTimeout(debounce);
   }, [username]);
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSignup = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    if (username.length > 40) {
-      setError('اسم المستخدم يجب ألا يتجاوز 40 حرفاً');
-      setLoading(false);
-      return;
-    }
-
-    // Check if username is reserved
-    const { data: reserved } = await supabase
-      .from('reserved_usernames')
-      .select('id')
-      .eq('username', username.toLowerCase())
-      .maybeSingle();
-
-    if (reserved) {
-      setError('اسم المستخدم غير متاح للتسجيل');
-      setLoading(false);
-      return;
-    }
-
-    // Check if username already exists
-    const { data: existing } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('username', username.toLowerCase())
-      .maybeSingle();
-
-    if (existing) {
-      setError('اسم المستخدم غير متاح للتسجيل');
-      setLoading(false);
-      return;
-    }
-
-    const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
-  email,
-  options: {
-    shouldCreateUser: true
+  if (username.length > 40) {
+    setError('اسم المستخدم يجب ألا يتجاوز 40 حرفاً');
+    setLoading(false);
+    return;
   }
-});
 
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
+  // التحقق هل الاسم محجوز
+  const { data: reserved } = await supabase
+    .from('reserved_usernames')
+    .select('id')
+    .eq('username', username.toLowerCase())
+    .maybeSingle();
 
-await supabase.auth.signInWithOtp({
-  email,
-  options: {
-    shouldCreateUser: true
+  if (reserved) {
+    setError('اسم المستخدم غير متاح للتسجيل');
+    setLoading(false);
+    return;
   }
-});
 
-router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+  // التحقق هل الاسم مستخدم
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('username', username.toLowerCase())
+    .maybeSingle();
+
+  if (existing) {
+    setError('اسم المستخدم غير متاح للتسجيل');
+    setLoading(false);
+    return;
+  }
 
   // إرسال كود التحقق للبريد
-  await supabase.auth.signInWithOtp({
-    email
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: true
+    }
   });
+
+  if (error) {
+    setError(error.message);
+    setLoading(false);
+    return;
+  }
 
   // نقل المستخدم لصفحة إدخال الكود
   router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
-}
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900/20 to-background">
