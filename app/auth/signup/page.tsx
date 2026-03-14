@@ -82,12 +82,9 @@ export default function SignupPage() {
     }
 
     const { data: authData, error: authError } = await supabase.auth.signUp({
-  email,
-  password,
-  options: {
-    emailRedirectTo: 'https://ilham.me/auth/callback'
-  }
-});
+   email,
+   password
+   });
 
     if (authError) {
       setError(authError.message);
@@ -95,21 +92,28 @@ export default function SignupPage() {
       return;
     }
 
-    if (authData.user) {
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: authData.user.id,
-        username: username.toLowerCase(),
-        account_type: accountType,
-      });
+if (authData.user) {
 
-      if (profileError) {
-        setError(profileError.message);
-        setLoading(false);
-        return;
-      }
+  const { error: profileError } = await supabase.from('profiles').insert({
+    id: authData.user.id,
+    username: username.toLowerCase(),
+    account_type: accountType,
+  });
 
-      router.push('/');
-    }
+  if (profileError) {
+    setError(profileError.message);
+    setLoading(false);
+    return;
+  }
+
+  // إرسال كود التحقق للبريد
+  await supabase.auth.signInWithOtp({
+    email
+  });
+
+  // نقل المستخدم لصفحة إدخال الكود
+  router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+}
 
     setLoading(false);
   };
