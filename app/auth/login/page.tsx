@@ -12,31 +12,44 @@ import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+  const isEmail = identifier.includes('@');
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  // تحويل username → email
+  const { data: email, error: rpcError } = await supabase.rpc(
+    'get_email_from_identifier',
+    { identifier }
+  );
 
-    if (error) {
-      setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
-      setLoading(false);
-      return;
-    }
-
-    router.push('/');
+  if (rpcError || !email) {
+    setError('البريد الإلكتروني أو اسم المستخدم غير صحيح');
     setLoading(false);
-  };
+    return;
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+    setLoading(false);
+    return;
+  }
+
+  router.push('/');
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900/20 to-background">
@@ -55,16 +68,16 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">البريد الإلكتروني</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="text-right"
-                placeholder="email@example.com"
-              />
+              <Label htmlFor="identifier">البريد الإلكتروني أو اسم المستخدم</Label>
+<Input
+  id="identifier"
+  type="text"
+  value={identifier}
+  onChange={(e) => setIdentifier(e.target.value)}
+  required
+  className="text-right"
+  placeholder="البريد الإلكتروني أو اسم المستخدم"
+/>
             </div>
 
             <div className="space-y-2">
