@@ -16,25 +16,29 @@ export default function VerifyPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleVerify = async () => {
+const handleVerify = async () => {
 
-    setLoading(true);
-    setError('');
+  setLoading(true);
+  setError('');
 
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: code,
-      type: 'magiclink'
-    });
+  const { error } = await supabase.auth.verifyOtp({
+    email,
+    token: code,
+    type: 'email'
+  });
 
-    if (error) {
-      setError('الكود غير صحيح');
-      setLoading(false);
-      return;
-    }
+  if (error) {
+    setError('الكود غير صحيح');
+    setLoading(false);
+    return;
+  }
 
-    router.push('/');
-  };
+  // تسجيل الخروج مباشرة بعد التحقق
+  await supabase.auth.signOut();
+
+  // تحويل المستخدم إلى صفحة تسجيل الدخول
+  router.push('/auth/login');
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center">
