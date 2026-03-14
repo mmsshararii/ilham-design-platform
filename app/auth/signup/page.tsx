@@ -62,7 +62,7 @@ if (username.length > 25) {
 }
 
 // السماح بالحروف الإنجليزية والأرقام والشرطة السفلية فقط
-const usernameRegex = /^[a-zA-Z0-9_]+$/;
+const usernameRegex = /^[a-z0-9_]+$/;
 
 if (!usernameRegex.test(username)) {
   setError('اسم المستخدم يسمح بالحروف الإنجليزية والأرقام والشرطة السفلية فقط');
@@ -138,7 +138,7 @@ if (!usernameRegex.test(username)) {
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setUsername(e.target.value.toLowerCase())}
                 required
                 className="text-right"
                 placeholder="email@example.com"
