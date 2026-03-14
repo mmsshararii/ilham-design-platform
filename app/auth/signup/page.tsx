@@ -94,19 +94,14 @@ export default function SignupPage() {
       return;
     }
 
-if (authData.user) {
-
-  const { error: profileError } = await supabase.from('profiles').insert({
-    id: authData.user.id,
-    username: username.toLowerCase(),
-    account_type: accountType,
-  });
-
-  if (profileError) {
-    setError(profileError.message);
-    setLoading(false);
-    return;
+await supabase.auth.signInWithOtp({
+  email,
+  options: {
+    shouldCreateUser: true
   }
+});
+
+router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
 
   // إرسال كود التحقق للبريد
   await supabase.auth.signInWithOtp({
