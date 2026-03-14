@@ -49,11 +49,21 @@ const handleSignup = async (e: React.FormEvent) => {
   setLoading(true);
   setError('');
 
-  if (username.length > 40) {
-    setError('اسم المستخدم يجب ألا يتجاوز 40 حرفاً');
-    setLoading(false);
-    return;
-  }
+// الحد الأقصى لطول اسم المستخدم
+if (username.length > 25) {
+  setError('اسم المستخدم يجب ألا يتجاوز 25 حرفاً');
+  setLoading(false);
+  return;
+}
+
+// السماح بالحروف الإنجليزية والأرقام والشرطة السفلية فقط
+const usernameRegex = /^[a-zA-Z0-9_]+$/;
+
+if (!usernameRegex.test(username)) {
+  setError('اسم المستخدم يسمح بالحروف الإنجليزية والأرقام والشرطة السفلية فقط');
+  setLoading(false);
+  return;
+}
 
   // التحقق هل الاسم محجوز
   const { data: reserved } = await supabase
@@ -153,7 +163,7 @@ const handleSignup = async (e: React.FormEvent) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  maxLength={40}
+                  maxLength={25}
                   className="text-right pl-10"
                   placeholder="اسم المستخدم"
                 />
@@ -185,7 +195,7 @@ const handleSignup = async (e: React.FormEvent) => {
                   )}
                 </div>
                 <span className="text-muted-foreground">
-                  {username.length}/40 حرف
+                  {username.length}/25 حرف
                 </span>
               </div>
             </div>
