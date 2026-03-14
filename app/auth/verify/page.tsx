@@ -15,6 +15,7 @@ export default function VerifyPage() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
 const handleVerify = async () => {
 
@@ -33,11 +34,16 @@ const handleVerify = async () => {
     return;
   }
 
-  // تسجيل الخروج مباشرة بعد التحقق
+  // تسجيل الخروج
   await supabase.auth.signOut();
 
-  // تحويل المستخدم إلى صفحة تسجيل الدخول
-  router.push('/auth/login');
+  // إظهار رسالة النجاح
+  setSuccess(true);
+
+  // الانتظار قليلاً ثم تحويل المستخدم
+  setTimeout(() => {
+    router.push('/auth/login');
+  }, 1500);
 };
 
   return (
@@ -60,7 +66,11 @@ const handleVerify = async () => {
             {error}
           </p>
         )}
-
+{success && (
+  <p className="text-green-500 text-sm text-center">
+    تم تفعيل الحساب بنجاح
+  </p>
+)}
         <Button
           onClick={handleVerify}
           disabled={loading}
