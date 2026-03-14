@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CheckCircle } from "lucide-react";
 
 export default function VerifyPage() {
 
@@ -46,41 +47,59 @@ const handleVerify = async () => {
   }, 1500);
 };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
+return (
+  <div className="min-h-screen flex items-center justify-center">
 
-      <div className="w-full max-w-sm space-y-4">
+    <div className="w-full max-w-sm space-y-4 text-center">
 
-        <h2 className="text-xl font-bold text-center">
-          أدخل كود التحقق
-        </h2>
+      {!success && (
+        <>
+          <h2 className="text-xl font-bold">
+            أدخل كود التحقق
+          </h2>
 
-        <Input
-          placeholder="123456"
-          value={code}
-          onChange={(e)=>setCode(e.target.value)}
-        />
+          <Input
+            placeholder="123456"
+            value={code}
+            onChange={(e)=>setCode(e.target.value)}
+          />
 
-        {error && (
-          <p className="text-red-500 text-sm text-center">
-            {error}
-          </p>
-        )}
-{success && (
-  <p className="text-green-500 text-sm text-center">
-    تم تفعيل الحساب بنجاح
-  </p>
+          {error && (
+            <p className="text-red-500 text-sm">
+              {error}
+            </p>
+          )}
+
+          <Button
+            onClick={handleVerify}
+            disabled={loading}
+            className="w-full"
+          >
+            تأكيد
+          </Button>
+        </>
+      )}
+
+     {success && (
+  <div className="space-y-4">
+
+    <div className="flex justify-center">
+      <CheckCircle className="w-16 h-16 text-green-500" />
+    </div>
+
+    <h2 className="text-xl font-bold">
+      تم تفعيل الحساب بنجاح
+    </h2>
+
+    <p className="text-sm text-gray-400">
+      جاري تحويلك إلى صفحة تسجيل الدخول
+    </p>
+
+  </div>
 )}
-        <Button
-          onClick={handleVerify}
-          disabled={loading}
-          className="w-full"
-        >
-          تأكيد
-        </Button>
-
-      </div>
 
     </div>
-  );
+
+  </div>
+);
 }
