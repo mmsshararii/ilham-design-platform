@@ -27,7 +27,12 @@ export default function SignupPage() {
         setUsernameAvailable(null);
         return;
       }
+const usernameRegex = /^[a-zA-Z0-9_]+$/;
 
+if (!usernameRegex.test(username)) {
+  setUsernameAvailable(false);
+  return;
+}
       setCheckingUsername(true);
 
       const [reservedRes, existingRes] = await Promise.all([
