@@ -85,7 +85,7 @@ export default function SignupPage() {
   email,
   password,
   options: {
-    emailRedirectTo: 'https://www.ilham.me/auth/callback'
+    emailRedirectTo: 'https://ilham.me/auth/callback'
   }
 });
 
