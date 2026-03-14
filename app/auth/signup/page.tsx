@@ -81,10 +81,12 @@ export default function SignupPage() {
       return;
     }
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-   email,
-   password
-   });
+    const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
+  email,
+  options: {
+    shouldCreateUser: true
+  }
+});
 
     if (authError) {
       setError(authError.message);
