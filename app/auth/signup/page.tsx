@@ -138,7 +138,7 @@ if (!usernameRegex.test(username)) {
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="text-right"
                 placeholder="email@example.com"
@@ -166,7 +166,7 @@ if (!usernameRegex.test(username)) {
                   id="username"
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
                   required
                   maxLength={25}
                   className="text-right pl-10"
