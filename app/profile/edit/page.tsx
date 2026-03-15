@@ -31,12 +31,9 @@ export default function EditProfilePage() {
   const [lastUsernameChange, setLastUsernameChange] = useState<string | null>(null);
   const [canChangeUsername, setCanChangeUsername] = useState(true);
   const [daysUntilChange, setDaysUntilChange] = useState(0);
-  const [socialLinks, setSocialLinks] = useState({
-    twitter: '',
-    instagram: '',
-    behance: '',
-    dribbble: '',
-  });
+  const [socialLinks, setSocialLinks] = useState<
+  { platform: string; url: string }[]
+>([]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -78,14 +75,9 @@ export default function EditProfilePage() {
         }
       }
 
-      if (data.social_links) {
-        setSocialLinks({
-          twitter: data.social_links.twitter || '',
-          instagram: data.social_links.instagram || '',
-          behance: data.social_links.behance || '',
-          dribbble: data.social_links.dribbble || '',
-        });
-      }
+      if (data.social_links && Array.isArray(data.social_links)) {
+  setSocialLinks(data.social_links);
+}
     }
     setLoading(false);
   };
@@ -156,12 +148,12 @@ export default function EditProfilePage() {
       avatar_url: avatarUrl.trim() || null,
       banner_url: bannerUrl.trim() || null,
       welcome_message: welcomeMessage.trim() || null,
-      social_links: {
-        twitter: socialLinks.twitter.trim(),
-        instagram: socialLinks.instagram.trim(),
-        behance: socialLinks.behance.trim(),
-        dribbble: socialLinks.dribbble.trim(),
-      },
+      social_links: socialLinks
+  .filter((l) => l.url.trim() !== '')
+  .map((l) => ({
+    platform: l.platform,
+    url: l.url.trim(),
+  })),
       updated_at: new Date().toISOString(),
     };
 
@@ -310,57 +302,64 @@ export default function EditProfilePage() {
                 />
               </div>
 
-              <div className="space-y-4 p-4 border border-border rounded-lg">
-                <h3 className="font-semibold">روابط التواصل الاجتماعي</h3>
+<div className="space-y-4 p-4 border border-border rounded-lg">
+  <h3 className="font-semibold">روابط التواصل الاجتماعي</h3>
 
-                <div className="space-y-2">
-                  <Label htmlFor="twitter">تويتر / X</Label>
-                  <Input
-                    id="twitter"
-                    type="url"
-                    value={socialLinks.twitter}
-                    onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
-                    placeholder="https://twitter.com/username"
-                    className="text-right"
-                  />
-                </div>
+  {socialLinks.map((link, index) => (
+    <div key={index} className="flex gap-2">
+      <select
+        value={link.platform}
+        onChange={(e) => {
+          const updated = [...socialLinks];
+          updated[index].platform = e.target.value;
+          setSocialLinks(updated);
+        }}
+        className="border rounded-md px-2 bg-background"
+      >
+        <option value="twitter">Twitter / X</option>
+        <option value="instagram">Instagram</option>
+        <option value="behance">Behance</option>
+        <option value="dribbble">Dribbble</option>
+        <option value="linkedin">LinkedIn</option>
+        <option value="youtube">YouTube</option>
+        <option value="github">GitHub</option>
+        <option value="website">Website</option>
+      </select>
 
-                <div className="space-y-2">
-                  <Label htmlFor="instagram">إنستغرام</Label>
-                  <Input
-                    id="instagram"
-                    type="url"
-                    value={socialLinks.instagram}
-                    onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
-                    placeholder="https://instagram.com/username"
-                    className="text-right"
-                  />
-                </div>
+      <Input
+        type="url"
+        value={link.url}
+        placeholder="https://..."
+        onChange={(e) => {
+          const updated = [...socialLinks];
+          updated[index].url = e.target.value;
+          setSocialLinks(updated);
+        }}
+        className="flex-1 text-right"
+      />
 
-                <div className="space-y-2">
-                  <Label htmlFor="behance">بيهانس</Label>
-                  <Input
-                    id="behance"
-                    type="url"
-                    value={socialLinks.behance}
-                    onChange={(e) => setSocialLinks({ ...socialLinks, behance: e.target.value })}
-                    placeholder="https://behance.net/username"
-                    className="text-right"
-                  />
-                </div>
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={() => {
+          setSocialLinks(socialLinks.filter((_, i) => i !== index));
+        }}
+      >
+        حذف
+      </Button>
+    </div>
+  ))}
 
-                <div className="space-y-2">
-                  <Label htmlFor="dribbble">دريبل</Label>
-                  <Input
-                    id="dribbble"
-                    type="url"
-                    value={socialLinks.dribbble}
-                    onChange={(e) => setSocialLinks({ ...socialLinks, dribbble: e.target.value })}
-                    placeholder="https://dribbble.com/username"
-                    className="text-right"
-                  />
-                </div>
-              </div>
+  <Button
+    type="button"
+    variant="outline"
+    onClick={() =>
+      setSocialLinks([...socialLinks, { platform: 'twitter', url: '' }])
+    }
+  >
+    + إضافة حساب
+  </Button>
+</div>
 
               {error && <FormAlert type="error" message={error} />}
               {success && <FormAlert type="success" message={success} />}
