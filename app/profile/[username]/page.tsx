@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ArrowRight, Loader as Loader2, CreditCard as Edit2, UserPlus, UserMinus } from 'lucide-react';
-
+import { socialPlatforms } from "@/lib/social-platforms";
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -229,31 +229,36 @@ export default function ProfilePage() {
             )}
 
             {/* Section 6 - Social Links */}
-            {profile.social_links && Object.entries(profile.social_links).filter(([_, url]) => url).length > 0 && (
-              <div className="mt-8 px-4 sm:px-8">
-                <div className="space-y-3">
-                  <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                    روابط التواصل
-                  </h2>
-                  <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-                    {Object.entries(profile.social_links)
-                      .filter(([_, url]) => url)
-                      .map(([platform, url]) => (
-                        <a
-                          key={platform}
-                          href={url as string}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 rounded-full border-2 border-blue-500/30 hover:border-blue-500/50 transition-all duration-200 hover:scale-105"
-                        >
-                          {socialLabels[platform] || platform}
-                          <ArrowRight className="h-4 w-4 rotate-180" />
-                        </a>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            )}
+{Array.isArray(profile.social_links) && profile.social_links.length > 0 && (
+  <div className="mt-8 px-4 sm:px-8">
+    <div className="space-y-3">
+      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        روابط التواصل
+      </h2>
+
+      <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+        {profile.social_links.map((link: any) => {
+
+          const platform = socialPlatforms[link.platform];
+          const Icon = platform?.icon;
+
+          return (
+            <a
+              key={link.platform}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 rounded-full border-2 border-blue-500/30 transition-all duration-200 hover:scale-105"
+            >
+              {Icon && <Icon className="h-4 w-4" />}
+              {platform?.label || link.platform}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+)}
 
             {/* Section 7 - Extended Introduction (using bio as extended info if available) */}
             {profile.bio && profile.bio.length > 100 && (
