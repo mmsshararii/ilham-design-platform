@@ -237,14 +237,14 @@ export default function ProfilePage() {
       </h2>
 
       <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-        {profile.social_links.map((link: any) => {
+        {profile.social_links.map((link: any, index: number) => {
 
-          const platform = socialPlatforms[link.platform];
+          const platform = socialPlatforms[link.platform as keyof typeof socialPlatforms];
           const Icon = platform?.icon;
 
           return (
             <a
-              key={link.platform}
+              key={index}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
