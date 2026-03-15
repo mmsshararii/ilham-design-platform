@@ -42,10 +42,10 @@ export default function EditProfilePage() {
   }, [user, authLoading, router]);
 
   useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
+  if (user && loading) {
+    fetchProfile();
+  }
+}, [user, loading]);
 
   const fetchProfile = async () => {
     const { data, error } = await supabase
