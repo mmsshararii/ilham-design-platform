@@ -214,7 +214,7 @@ className="flex items-center gap-3 flex-1 min-w-0"
 <p className="font-semibold truncate">{displayName}</p>
 {post.profiles?.display_name && (
 <span className="text-xs text-muted-foreground">
-  <Username username={post.profiles.username} />
+  <Username username={post.profiles?.username || ""} />
 </span>
 )}
 </div>
