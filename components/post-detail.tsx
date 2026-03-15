@@ -13,7 +13,7 @@ import { ArrowRight, Loader as Loader2, Send } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
-
+import { Username } from '@/components/username';
 export default function PostDetail({ postId }: { postId: string }) {
 
   const { user, loading: authLoading } = useAuth();
@@ -172,9 +172,9 @@ export default function PostDetail({ postId }: { postId: string }) {
 
                     <div className="flex-1">
                       <div className="flex gap-2 text-sm">
-                        <span className="font-semibold">
-                          {c.profiles?.username}
-                        </span>
+                       <span className="font-semibold">
+                       <Username username={c.profiles?.username || ""} />
+                       </span>
                         <span className="text-muted-foreground text-xs">
                           {formatDistanceToNow(new Date(c.created_at), {
                             addSuffix: true,
