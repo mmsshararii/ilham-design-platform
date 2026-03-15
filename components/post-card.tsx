@@ -21,7 +21,7 @@ import { MessageCircle, Heart, Share2, Bookmark, MoreHorizontal, Eye, Repeat2, F
 import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-
+import { Username } from "@/components/username";
 const postTypeLabels = {
 my_design: 'تصميمي',
 design_offer: 'عرض تصميم',
@@ -213,7 +213,9 @@ className="flex items-center gap-3 flex-1 min-w-0"
 <div className="flex items-center gap-2">
 <p className="font-semibold truncate">{displayName}</p>
 {post.profiles?.display_name && (
-<span className="text-xs text-muted-foreground">@{post.profiles.username}</span>
+<span className="text-xs text-muted-foreground">
+  <Username username={post.profiles.username} />
+</span>
 )}
 </div>
 <p className="text-xs text-muted-foreground">
