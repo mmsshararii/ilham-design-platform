@@ -171,17 +171,24 @@ export default function PostDetail({ postId }: { postId: string }) {
                     </Avatar>
 
                     <div className="flex-1">
-                      <div className="flex gap-2 text-sm">
-                       <span className="font-semibold">
-                       <Username username={c.profiles?.username || ""} />
-                       </span>
-                        <span className="text-muted-foreground text-xs">
-                          {formatDistanceToNow(new Date(c.created_at), {
-                            addSuffix: true,
-                            locale: ar,
-                          })}
-                        </span>
-                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+
+  <span className="font-semibold">
+    {c.profiles?.display_name || c.profiles?.username}
+  </span>
+
+  <span className="text-muted-foreground text-xs">
+    <Username username={c.profiles?.username || ""} />
+  </span>
+
+  <span className="text-muted-foreground text-xs">
+    {formatDistanceToNow(new Date(c.created_at), {
+      addSuffix: true,
+      locale: ar,
+    })}
+  </span>
+
+</div>
 
                       <p className="text-sm mt-1">{c.content}</p>
                     </div>
