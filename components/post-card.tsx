@@ -212,11 +212,11 @@ className="flex items-center gap-3 flex-1 min-w-0"
 <div className="flex-1 min-w-0">
 <div className="flex items-center gap-2">
 <p className="font-semibold truncate">{displayName}</p>
-{post.profiles?.display_name && (
+
 <span className="text-xs text-muted-foreground">
   <Username username={post.profiles?.username || ""} />
 </span>
-)}
+
 </div>
 <p className="text-xs text-muted-foreground">
 {formatDistanceToNow(new Date(post.created_at), {
