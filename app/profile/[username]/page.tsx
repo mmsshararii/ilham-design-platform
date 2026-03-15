@@ -208,11 +208,12 @@ export default function ProfilePage() {
               <div className="mt-8 px-4 sm:px-8">
                 <div className="bg-gradient-to-r from-blue-500/5 via-teal-500/5 to-emerald-500/5 border border-blue-500/20 rounded-lg p-6 text-center">
                   <p className="text-lg sm:text-xl text-foreground/90 leading-relaxed font-medium">
-                    {profile.welcome_message}
-                  </p>
-                </div>
-              </div>
-            )}
+                    {profile.welcome_message && (
+  <div className="flex items-center justify-center gap-2 mt-4 text-muted-foreground">
+    <span className="text-lg">👋</span>
+    <p className="text-sm">{profile.welcome_message}</p>
+  </div>
+)}
 
             {/* Section 5 - Bio Section */}
             {profile.bio && (
