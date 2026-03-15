@@ -270,6 +270,9 @@ if (containsLink(bio) || containsLink(welcomeMessage)) {
                   rows={4}
                   maxLength={200}
                 />
+                <p className="text-xs text-amber-500">
+لا يسمح بإضافة روابط في النبذة
+</p>
                 <p className="text-xs text-muted-foreground text-left">
                   {bio.length}/200 حرف
                 </p>
@@ -286,6 +289,9 @@ if (containsLink(bio) || containsLink(welcomeMessage)) {
                   rows={3}
                   maxLength={150}
                 />
+                <p className="text-xs text-amber-500">
+لا يسمح بإضافة روابط في رسالة الترحيب
+</p>
               </div>
 
               <div className="space-y-2">
