@@ -141,7 +141,17 @@ export default function EditProfilePage() {
         return;
       }
     }
+// منع الروابط في النبذة ورسالة الترحيب
+const containsLink = (text: string) => {
+  const urlPattern = /(https?:\/\/|www\.|\.com|\.net|\.org|\.io)/i;
+  return urlPattern.test(text);
+};
 
+if (containsLink(bio) || containsLink(welcomeMessage)) {
+  setError('لا يسمح بإضافة روابط في النبذة أو رسالة الترحيب');
+  setSaving(false);
+  return;
+}
     const updates: any = {
       display_name: displayName.trim() || null,
       bio: bio.trim() || null,
