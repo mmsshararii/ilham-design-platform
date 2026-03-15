@@ -1,5 +1,5 @@
 'use client';
-
+import { Username } from "@/components/username";
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -160,7 +160,7 @@ export default function SearchPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <p className="font-semibold">{profile.username}</p>
+                      <Username username={profile.username} />
                       {profile.bio && (
                         <p className="text-sm text-muted-foreground line-clamp-1">
                           {profile.bio}

@@ -1,5 +1,5 @@
 'use client';
-
+import { Username } from "@/components/username";
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -158,7 +158,7 @@ export default function ProfilePage() {
                   {profile.display_name || profile.username}
                 </h1>
                 <p className="text-base sm:text-lg text-muted-foreground">
-                  @{profile.username}
+                  <Username username={profile.username} />
                 </p>
                 <p className="text-sm sm:text-base text-blue-500 font-medium">
                   {accountTypeLabels[profile.account_type as keyof typeof accountTypeLabels]}
