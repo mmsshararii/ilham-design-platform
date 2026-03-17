@@ -85,10 +85,8 @@ export function Navbar() {
               onClick={() => router.push('/explore/trending')}
               variant="ghost"
               size="sm"
-              className="gap-1.5"
             >
-              <span className="text-sm">الترند</span>
-              <span className="text-lg leading-none">↗</span>
+              <span className="text-sm">الترند ↗</span>
             </Button>
             <Button
               onClick={() => router.push('/explore/designers')}

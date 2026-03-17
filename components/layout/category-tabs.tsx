@@ -18,7 +18,7 @@ const tabs = [
 
 export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
   return (
-    <div className="sticky top-0 z-40 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="border-b border-border/40 bg-background">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => (
