@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/lib/auth-context';
+import { FloatingLogout } from '@/components/floating-logout';
 
 export const metadata: Metadata = {
   title: 'ILHAM - منصة التواصل والتصاميم',
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           {children}
+          <FloatingLogout />
         </AuthProvider>
       </body>
     </html>

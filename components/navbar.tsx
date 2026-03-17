@@ -5,12 +5,12 @@ import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Sparkles, Search as SearchIcon, Chrome as Home, User, CirclePlus as PlusCircle, LogOut, TrendingUp, Users, Bell } from 'lucide-react';
+import { Search as SearchIcon, Chrome as Home, User, CirclePlus as PlusCircle, Users, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function Navbar() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile } = useAuth();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [unreadCount, setUnreadCount] = useState(0);
@@ -48,12 +48,9 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="max-w-4xl mx-auto px-6 py-3 space-y-3">
         <div className="flex items-center justify-between gap-6">
-          <Link href="/" className="flex flex-col items-end gap-0.5 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-0.5 flex-shrink-0">
             <span className="font-bold text-xl text-gradient leading-none">
               استلهم
-            </span>
-            <span className="text-[10px] text-muted-foreground/60 leading-tight text-right max-w-[200px] hidden sm:inline">
-              استكشف التصاميم والإبداعات من المصممين حول العالم
             </span>
           </Link>
 
@@ -133,14 +130,6 @@ export function Navbar() {
               <PlusCircle className="h-4 w-4" />
               <span className="hidden sm:inline text-sm">إنشاء منشور</span>
             </Button>
-            <Button
-              onClick={signOut}
-              variant="ghost"
-              size="sm"
-              className="gap-2 text-muted-foreground hover:text-destructive"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 
@@ -160,6 +149,14 @@ export function Navbar() {
             />
           </div>
         </form>
+      </div>
+
+      <div className="border-t border-border/50 bg-card/60">
+        <div className="max-w-4xl mx-auto px-6 py-2">
+          <p className="text-xs text-muted-foreground/70 text-center">
+            استكشف التصاميم والإبداعات من المصممين حول العالم
+          </p>
+        </div>
       </div>
     </nav>
   );
