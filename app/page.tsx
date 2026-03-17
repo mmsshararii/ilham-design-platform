@@ -1,13 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { useFeed } from '@/features/feed/hooks/use-feed';
 import { FeedContainer } from '@/features/feed/feed-container';
 import { Loader as Loader2 } from 'lucide-react';
-
-// 🔥 أضف هذا الاستيراد (تأكد من المسار الصحيح)
-import { CategoryTabs } from '@/components/category-tabs';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function HomePage() {
   const { user, loading: authLoading } = useAuth();
@@ -27,15 +25,20 @@ export default function HomePage() {
     );
   }
 
+  const feed = useFeed({ userId: user.id });
+
   return (
-    <main className="flex flex-col gap-4">
-
-      {/* 🔥 الأقسام هنا (ثابتة فوق المنشورات) */}
-      <CategoryTabs />
-
-      {/* 🔥 المنشورات */}
-      <FeedContainer userId={user.id} />
-
-    </main>
+    <FeedContainer
+      userId={user.id}
+      items={feed.items}
+      loading={feed.loading}
+      loadingMore={feed.loadingMore}
+      activeTab={feed.activeTab}
+      onTabChange={feed.handleTabChange}
+      onLoadMore={feed.loadMore}
+      onLike={feed.handleLike}
+      onComment={feed.handleComment}
+      onAdClick={feed.handleAdClick}
+    />
   );
 }
