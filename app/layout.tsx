@@ -1,11 +1,10 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/lib/auth-context';
-import { FABCreatePost } from '@/components/fab-create-post';
 
 export const metadata: Metadata = {
-  title: 'استلهم - منصة المصممين والمبدعين',
-  description: 'منصة عربية لمشاركة التصاميم وطلب الخدمات التصميمية',
+  title: 'ILHAM - منصة التواصل والتصاميم',
+  description: 'منصة عربية لمشاركة التصاميم والمحتوى',
 };
 
 export default function RootLayout({
@@ -18,7 +17,6 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           {children}
-          <FABCreatePost />
         </AuthProvider>
       </body>
     </html>

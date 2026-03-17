@@ -2,12 +2,13 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase, Profile } from './supabase';
+import { supabase } from './supabase';
+import { UserProfile } from '@/types/user';
 import { useRouter } from 'next/navigation';
 
 type AuthContextType = {
   user: User | null;
-  profile: Profile | null;
+  profile: UserProfile | null;
   loading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -25,13 +26,13 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
-      .from('profiles')
+      .from('users_profile')
       .select('*')
       .eq('id', userId)
       .maybeSingle();
