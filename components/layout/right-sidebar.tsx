@@ -15,7 +15,7 @@ const trendingHashtags = [
 
 export function RightSidebar() {
   return (
-    <aside className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border/40 bg-background p-4 space-y-4">
+    <aside className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border/40 bg-background p-4 space-y-4 z-30">
       <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
         إنشاء منشور
       </Button>

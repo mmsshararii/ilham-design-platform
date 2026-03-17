@@ -147,41 +147,44 @@ export function FeedContainer({ userId }: FeedContainerProps) {
   return (
     <div className="min-h-screen bg-background">
       <MainHeader />
-      <RightSidebar />
 
-      <main className="mr-80 pt-16">
-        <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
+      <div className="pt-16 flex">
+        <RightSidebar />
 
-        <div className="max-w-2xl mx-auto">
-          {isLoading && feedItems.length === 0 ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-            </div>
-          ) : feedItems.length === 0 ? (
-            <div className="text-center py-12 px-4">
-              <p className="text-muted-foreground">لا توجد منشورات</p>
-            </div>
-          ) : (
-            <>
-              {feedItems.map((item) => (
-                <FeedItem
-                  key={item.id}
-                  item={item}
-                  onLike={handleLike}
-                  onComment={handleComment}
-                  onAdClick={handleAdClick}
-                />
-              ))}
+        <main className="flex-1 mr-80">
+          <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-              {isLoading && (
-                <div className="flex items-center justify-center py-8 border-b border-border/40">
-                  <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </main>
+          <div className="max-w-2xl mx-auto">
+            {isLoading && feedItems.length === 0 ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+              </div>
+            ) : feedItems.length === 0 ? (
+              <div className="text-center py-12 px-4">
+                <p className="text-muted-foreground">لا توجد منشورات</p>
+              </div>
+            ) : (
+              <>
+                {feedItems.map((item) => (
+                  <FeedItem
+                    key={item.id}
+                    item={item}
+                    onLike={handleLike}
+                    onComment={handleComment}
+                    onAdClick={handleAdClick}
+                  />
+                ))}
+
+                {isLoading && (
+                  <div className="flex items-center justify-center py-8 border-b border-border/40">
+                    <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
