@@ -46,14 +46,14 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
-      <div className="max-w-4xl mx-auto px-4 py-3 space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="p-1.5 bg-gradient-purple rounded-lg">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-xl text-gradient hidden sm:inline">
+      <div className="max-w-4xl mx-auto px-6 py-3 space-y-3">
+        <div className="flex items-center justify-between gap-6">
+          <Link href="/" className="flex flex-col items-end gap-0.5 flex-shrink-0">
+            <span className="font-bold text-xl text-gradient leading-none">
               استلهم
+            </span>
+            <span className="text-[10px] text-muted-foreground/60 leading-tight text-right max-w-[200px] hidden sm:inline">
+              استكشف التصاميم والإبداعات من المصممين حول العالم
             </span>
           </Link>
 
@@ -74,7 +74,7 @@ export function Navbar() {
             </div>
           </form>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <Button
               onClick={() => router.push('/')}
               variant="ghost"
@@ -88,10 +88,10 @@ export function Navbar() {
               onClick={() => router.push('/explore/trending')}
               variant="ghost"
               size="sm"
-              className="gap-2"
+              className="gap-1.5"
             >
-              <TrendingUp className="h-4 w-4" />
-              <span className="hidden sm:inline text-sm">الترند</span>
+              <span className="text-sm">الترند</span>
+              <span className="text-lg leading-none">↗</span>
             </Button>
             <Button
               onClick={() => router.push('/explore/designers')}
