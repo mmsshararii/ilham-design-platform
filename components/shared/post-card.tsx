@@ -1,10 +1,12 @@
 'use client';
 
-import { PostWithUser, PostType, PostStatus } from '@/types/post';
-import { Heart, MessageCircle, Eye } from 'lucide-react';
+import { PostWithUser } from '@/types/post';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { ar } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 interface PostCardProps {
   post: PostWithUser;
@@ -12,137 +14,140 @@ interface PostCardProps {
   onComment?: (postId: string) => void;
 }
 
-const POST_TYPE_LABELS: Record<PostType, string> = {
-  general: 'عام',
+const postTypeLabels: Record<string, string> = {
+  general: 'منشور عام',
   design: 'تصميم',
   request: 'طلب',
   offer: 'عرض',
-  attachment: 'مرفق',
+  attachment: 'ملحق',
 };
 
-const POST_TYPE_COLORS: Record<PostType, string> = {
-  general: 'bg-gray-100 text-gray-800',
-  design: 'bg-blue-100 text-blue-800',
-  request: 'bg-orange-100 text-orange-800',
-  offer: 'bg-green-100 text-green-800',
-  attachment: 'bg-purple-100 text-purple-800',
-};
-
-const POST_STATUS_LABELS: Record<PostStatus, string> = {
-  open: 'مفتوح',
-  closed: 'مغلق',
-  completed: 'مكتمل',
-};
-
-const POST_STATUS_COLORS: Record<PostStatus, string> = {
-  open: 'bg-green-100 text-green-800',
-  closed: 'bg-gray-100 text-gray-800',
-  completed: 'bg-blue-100 text-blue-800',
+const postTypeBadgeColors: Record<string, string> = {
+  general: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+  design: 'bg-purple-500/10 text-purple-600 border-purple-500/20',
+  request: 'bg-orange-500/10 text-orange-600 border-orange-500/20',
+  offer: 'bg-green-500/10 text-green-600 border-green-500/20',
+  attachment: 'bg-pink-500/10 text-pink-600 border-pink-500/20',
 };
 
 export function PostCard({ post, onLike, onComment }: PostCardProps) {
+  const timeAgo = formatDistanceToNow(new Date(post.created_at), {
+    addSuffix: true,
+    locale: ar,
+  });
+
   return (
-    <Card className="p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-3 mb-4">
-        <Avatar>
-          <AvatarImage src={post.user.avatar_url || undefined} />
-          <AvatarFallback>
-            {post.user.display_name?.[0] || post.user.username[0]}
+    <article className="border-b border-border/40 bg-background p-4 hover:bg-muted/20 transition-colors">
+      <div className="flex gap-3">
+        <Avatar className="h-12 w-12 border-2 border-border/40">
+          <AvatarImage src={post.user?.avatar_url || undefined} />
+          <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-500 text-white">
+            {post.user?.username?.[0]?.toUpperCase() || 'U'}
           </AvatarFallback>
         </Avatar>
+
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-semibold text-sm">
-              {post.user.display_name || post.user.username}
-            </h3>
-            <span className="text-gray-500 text-xs">@{post.user.username}</span>
-            <span className="text-gray-400 text-xs">
-              {new Date(post.created_at).toLocaleDateString('ar-SA')}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <Badge className={POST_TYPE_COLORS[post.type]}>
-              {POST_TYPE_LABELS[post.type]}
-            </Badge>
-            <Badge className={POST_STATUS_COLORS[post.status]}>
-              {POST_STATUS_LABELS[post.status]}
-            </Badge>
-          </div>
-        </div>
-      </div>
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-semibold text-foreground">
+                {post.user?.display_name || post.user?.username || 'مستخدم'}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                @{post.user?.username || 'user'}
+              </span>
+              <span className="text-sm text-muted-foreground">·</span>
+              <span className="text-sm text-muted-foreground">{timeAgo}</span>
+            </div>
 
-      {post.title && (
-        <h2 className="text-lg font-bold mb-2">{post.title}</h2>
-      )}
-
-      <p className="text-gray-800 mb-4 whitespace-pre-wrap">{post.description}</p>
-
-      {post.images && post.images.length > 0 && (
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          {post.images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Post image ${index + 1}`}
-              className="rounded-lg w-full h-48 object-cover"
-            />
-          ))}
-        </div>
-      )}
-
-      {post.attachments && post.attachments.length > 0 && (
-        <div className="mb-4 space-y-2">
-          {post.attachments.map((attachment, index) => (
-            <a
-              key={index}
-              href={attachment.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 p-2 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+            <Badge
+              variant="outline"
+              className={cn(
+                'text-xs font-medium border',
+                postTypeBadgeColors[post.type] || postTypeBadgeColors.general
+              )}
             >
-              <span className="text-sm text-blue-600">{attachment.name}</span>
-            </a>
-          ))}
-        </div>
-      )}
+              {postTypeLabels[post.type] || 'منشور'}
+            </Badge>
+          </div>
 
-      {post.price && (
-        <div className="mb-4">
-          <span className="text-lg font-bold text-green-600">
-            {post.price.toLocaleString('ar-SA')} ر.س
-          </span>
-        </div>
-      )}
+          {post.title && (
+            <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
+          )}
 
-      <div className="flex items-center gap-6 pt-4 border-t">
-        <button
-          onClick={() => onLike?.(post.id)}
-          className={`flex items-center gap-2 text-sm transition-colors ${
-            post.is_liked
-              ? 'text-red-600 hover:text-red-700'
-              : 'text-gray-600 hover:text-red-600'
-          }`}
-        >
-          <Heart
-            className="w-5 h-5"
-            fill={post.is_liked ? 'currentColor' : 'none'}
-          />
-          <span>{post.likes_count}</span>
-        </button>
+          <p className="text-foreground whitespace-pre-wrap mb-3">
+            {post.description}
+          </p>
 
-        <button
-          onClick={() => onComment?.(post.id)}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors"
-        >
-          <MessageCircle className="w-5 h-5" />
-          <span>{post.comments_count}</span>
-        </button>
+          {post.images && post.images.length > 0 && (
+            <div className={cn(
+              "grid gap-2 mb-3 rounded-lg overflow-hidden",
+              post.images.length === 1 && "grid-cols-1",
+              post.images.length === 2 && "grid-cols-2",
+              post.images.length >= 3 && "grid-cols-2"
+            )}>
+              {post.images.slice(0, 4).map((image, idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    "relative bg-muted overflow-hidden rounded-lg",
+                    post.images.length === 1 && "aspect-video",
+                    post.images.length >= 2 && "aspect-square",
+                    post.images.length === 3 && idx === 0 && "col-span-2"
+                  )}
+                >
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <Eye className="w-5 h-5" />
-          <span>{post.views_count}</span>
+          {post.price && (
+            <div className="mb-3 inline-block px-3 py-1.5 bg-green-500/10 text-green-600 rounded-lg text-sm font-semibold">
+              {post.price} ر.س
+            </div>
+          )}
+
+          <div className="flex items-center gap-6 text-muted-foreground">
+            <button
+              onClick={() => onLike?.(post.id)}
+              className={cn(
+                "flex items-center gap-2 hover:text-pink-600 transition-colors group",
+                post.is_liked && "text-pink-600"
+              )}
+            >
+              <Heart
+                className={cn(
+                  "h-5 w-5 group-hover:scale-110 transition-transform",
+                  post.is_liked && "fill-current"
+                )}
+              />
+              <span className="text-sm font-medium">{post.likes_count || 0}</span>
+            </button>
+
+            <button
+              onClick={() => onComment?.(post.id)}
+              className="flex items-center gap-2 hover:text-blue-600 transition-colors group"
+            >
+              <MessageCircle className="h-5 w-5 group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-medium">{post.comments_count || 0}</span>
+            </button>
+
+            <button className="flex items-center gap-2 hover:text-green-600 transition-colors group">
+              <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
+            </button>
+
+            {post.views_count !== undefined && (
+              <span className="text-sm mr-auto">
+                {post.views_count} مشاهدة
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </Card>
+    </article>
   );
 }

@@ -6,9 +6,11 @@ import { FeedItem as FeedItemType } from '@/types/feed';
 import { getFeed } from '@/services/feed.service';
 import { likePost, unlikePost } from '@/services/post.service';
 import { trackAdClick } from '@/services/ads.service';
-import { FeedTabs } from '@/components/layout/feed-tabs';
+import { MainHeader } from '@/components/layout/main-header';
+import { RightSidebar } from '@/components/layout/right-sidebar';
+import { CategoryTabs } from '@/components/layout/category-tabs';
 import { FeedItem } from '@/components/shared/feed-item';
-import { Button } from '@/components/ui/button';
+import { Loader as Loader2 } from 'lucide-react';
 
 interface FeedContainerProps {
   userId: string;
@@ -24,6 +26,21 @@ export function FeedContainer({ userId }: FeedContainerProps) {
   useEffect(() => {
     loadFeed();
   }, [activeTab]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
+        hasMore &&
+        !isLoading
+      ) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore, isLoading, page]);
 
   async function loadFeed() {
     setIsLoading(true);
@@ -128,44 +145,43 @@ export function FeedContainer({ userId }: FeedContainerProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <FeedTabs activeTab={activeTab} onTabChange={handleTabChange} />
+    <div className="min-h-screen bg-background">
+      <MainHeader />
+      <RightSidebar />
 
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        {isLoading && feedItems.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500">جاري التحميل...</p>
-          </div>
-        ) : feedItems.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500">لا توجد منشورات</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {feedItems.map((item) => (
-              <FeedItem
-                key={item.id}
-                item={item}
-                onLike={handleLike}
-                onComment={handleComment}
-                onAdClick={handleAdClick}
-              />
-            ))}
+      <main className="mr-80 pt-16">
+        <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-            {hasMore && (
-              <div className="text-center py-6">
-                <Button
-                  onClick={loadMore}
-                  disabled={isLoading}
-                  variant="outline"
-                >
-                  {isLoading ? 'جاري التحميل...' : 'تحميل المزيد'}
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+        <div className="max-w-2xl mx-auto">
+          {isLoading && feedItems.length === 0 ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+            </div>
+          ) : feedItems.length === 0 ? (
+            <div className="text-center py-12 px-4">
+              <p className="text-muted-foreground">لا توجد منشورات</p>
+            </div>
+          ) : (
+            <>
+              {feedItems.map((item) => (
+                <FeedItem
+                  key={item.id}
+                  item={item}
+                  onLike={handleLike}
+                  onComment={handleComment}
+                  onAdClick={handleAdClick}
+                />
+              ))}
+
+              {isLoading && (
+                <div className="flex items-center justify-center py-8 border-b border-border/40">
+                  <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
