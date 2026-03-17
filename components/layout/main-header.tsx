@@ -8,8 +8,12 @@ import Link from 'next/link';
 export function MainHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="h-16 px-4 flex items-center justify-between gap-6">
-        <div className="flex items-center gap-3 order-3">
+      <div className="h-16 px-6 flex items-center justify-between gap-8">
+        <div className="flex items-center gap-4 order-3">
+          <Link href="/trending" className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <span>الترند</span>
+            <span className="text-lg">↗</span>
+          </Link>
           <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
             <Bell className="h-5 w-5" />
           </Button>
@@ -29,9 +33,12 @@ export function MainHeader() {
           />
         </div>
 
-        <Link href="/" className="flex items-center gap-2 order-1">
-          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+        <Link href="/" className="flex flex-col items-end gap-0.5 order-1">
+          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none">
             استلهم
+          </span>
+          <span className="text-[10px] text-muted-foreground/60 leading-tight text-right max-w-[200px]">
+            استكشف التصاميم والإبداعات من المصممين حول العالم
           </span>
         </Link>
       </div>
