@@ -6,6 +6,9 @@ import { useAuth } from '@/lib/auth-context';
 import { FeedContainer } from '@/features/feed/feed-container';
 import { Loader as Loader2 } from 'lucide-react';
 
+// 🔥 أضف هذا الاستيراد (تأكد من المسار الصحيح)
+import { CategoryTabs } from '@/components/category-tabs';
+
 export default function HomePage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -24,5 +27,15 @@ export default function HomePage() {
     );
   }
 
-  return <FeedContainer userId={user.id} />;
+  return (
+    <main className="flex flex-col gap-4">
+
+      {/* 🔥 الأقسام هنا (ثابتة فوق المنشورات) */}
+      <CategoryTabs />
+
+      {/* 🔥 المنشورات */}
+      <FeedContainer userId={user.id} />
+
+    </main>
+  );
 }
