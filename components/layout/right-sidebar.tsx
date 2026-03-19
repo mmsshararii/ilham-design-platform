@@ -1,58 +1,43 @@
-export function RightSidebar() {
+export function HomeHeader() {
   return (
-    <div className="space-y-4">
+    <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
 
-      {/* زر إنشاء منشور */}
-      <button className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold hover:opacity-90 transition">
-        إنشاء منشور
-      </button>
+      {/* يمين */}
+      <div className="flex items-center gap-6">
+        <h1 className="text-xl font-semibold">استلهم</h1>
 
-      {/* كرت القائمة */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+        <nav className="flex gap-4 text-sm text-gray-400">
+          <span className="hover:text-white cursor-pointer">مخصص</span>
+          <span className="hover:text-white cursor-pointer">منشورات عامة</span>
+          <span className="hover:text-white cursor-pointer">تصاميم</span>
+          <span className="hover:text-white cursor-pointer">طلبات</span>
+        </nav>
+      </div>
 
-        <div className="flex items-center justify-between text-sm text-white">
-          <span>الرئيسية</span>
-          <span>🏠</span>
+      {/* يسار */}
+      <div className="flex items-center gap-4">
+
+        {/* بحث */}
+        <input
+          placeholder="ابحث عن أي شيء..."
+          className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 w-[260px] text-sm outline-none"
+        />
+
+        {/* إشعارات */}
+        <div className="relative cursor-pointer">
+          🔔
+          <span className="absolute -top-1 -right-1 bg-red-500 text-[10px] px-1 rounded-full">
+            2
+          </span>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-400 hover:text-white cursor-pointer">
-          <span>ملفي الشخصي</span>
-          <span>👤</span>
+        {/* المستخدم */}
+        <div className="flex items-center gap-2 cursor-pointer">
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" />
+          <span className="text-sm">محمد</span>
         </div>
 
       </div>
-
-      {/* كرت الهاشتاقات */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-
-        <h3 className="text-sm text-gray-300 mb-3">الهاشتاقات الأكثر تداول</h3>
-
-        <div className="space-y-2 text-sm">
-
-          <div className="flex justify-between text-purple-400">
-            <span>#تصميم_شعارات</span>
-            <span className="text-gray-500">2.5k</span>
-          </div>
-
-          <div className="flex justify-between text-purple-400">
-            <span>#هوية_بصرية</span>
-            <span className="text-gray-500">1.8k</span>
-          </div>
-
-          <div className="flex justify-between text-purple-400">
-            <span>#تصميم_واجهات</span>
-            <span className="text-gray-500">1.5k</span>
-          </div>
-
-          <div className="flex justify-between text-purple-400">
-            <span>#موشن_جرافيك</span>
-            <span className="text-gray-500">1.2k</span>
-          </div>
-
-        </div>
-
-      </div>
-
     </div>
   );
 }

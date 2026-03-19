@@ -12,26 +12,17 @@ export function HomePage() {
       {/* HEADER */}
       <HomeHeader />
 
-      {/* MAIN LAYOUT */}
+      {/* MAIN */}
       <div className="flex justify-center gap-6 px-4 pt-6">
 
         {/* FEED */}
-        <main className="w-full max-w-[640px]">
-
-          {/* Tabs */}
-          <div className="mb-4">
-            <HomeCategories />
-          </div>
-
-          {/* Posts */}
-          <div className="space-y-4">
-            <HomeFeed />
-          </div>
-
+        <main className="w-full max-w-[620px] space-y-4">
+          <HomeCategories />
+          <HomeFeed />
         </main>
 
         {/* SIDEBAR */}
-        <aside className="block w-[300px] shrink-0">
+        <aside className="w-[300px] shrink-0">
           <RightSidebar />
         </aside>
 
