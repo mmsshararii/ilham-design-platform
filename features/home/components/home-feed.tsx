@@ -1,17 +1,13 @@
-'use client';
-
 export function HomeFeed() {
   return (
-   <div className="w-full max-w-2xl p-4 space-y-4">
-
-      <div className="border rounded-lg p-4">
+    <div className="space-y-3">
+      <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
         هذا منشور تجريبي
       </div>
 
-      <div className="border rounded-lg p-4">
+      <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
         منشور ثاني
       </div>
-
     </div>
   );
 }

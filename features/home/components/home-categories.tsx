@@ -1,63 +1,13 @@
-'use client';
-
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
-
-const tabs = ['مخصص', 'منشورات عامة', 'تصاميم', 'طلبات', 'عروض', 'ملحقات'];
-
 export function HomeCategories() {
-  const [active, setActive] = useState('مخصص');
+  const tabs = ['مخصص', 'منشورات عامة', 'تصاميم', 'طلبات'];
 
   return (
-    <div className="sticky top-[96px] z-30 border-b border-border/40 bg-background/80 backdrop-blur">
-      
-      <div className="w-full px-4 flex gap-4 overflow-x-auto">
-        
-        {tabs.map((tab) => {
-          const isActive = active === tab;
-
-          return (                                                                                                                          
-            <button
-              key={tab}
-              onClick={() => setActive(tab)}
-              className="relative px-4 py-3 text-sm font-medium whitespace-nowrap"
-            >
-              
-              {/* =======================
-                  🎨 TEXT STATE
-              ======================= */}
-              <span
-                className={cn(
-                  "transition-colors duration-200",
-
-                  // الوضع الطبيعي
-                  "text-muted-foreground",
-
-                  // Hover
-                  "hover:text-purple-400",
-
-                  // Active
-                  isActive && "text-purple-500 font-semibold"
-                )}
-              >
-                {tab}
-              </span>
-
-              {/* =======================
-                  📍 UNDERLINE
-              ======================= */}
-              <span
-                className={cn(
-                  "absolute -bottom-[3px] left-2 right-2 h-[2px] rounded-full transition-all duration-300",
-                  isActive ? "bg-purple-500 opacity-100" : "opacity-0"
-                )}
-              />
-
-            </button>
-          );
-        })}
-
-      </div>
+    <div className="flex gap-4 border-b border-white/10 pb-2">
+      {tabs.map((tab) => (
+        <button key={tab} className="text-sm text-gray-400 hover:text-white">
+          {tab}
+        </button>
+      ))}
     </div>
   );
 }

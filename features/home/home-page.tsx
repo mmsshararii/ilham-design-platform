@@ -1,37 +1,39 @@
 'use client';
 
 import { HomeHeader } from './components/home-header';
-import { HomeSubtitle } from './components/home-subtitle';
 import { HomeCategories } from './components/home-categories';
 import { HomeFeed } from './components/home-feed';
 import { RightSidebar } from '@/components/layout/right-sidebar';
 
 export function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#06070a] text-white">
 
-      {/* الهيدر */}
+      {/* HEADER */}
       <HomeHeader />
 
-      {/* النص تحت اللوقو */}
-      <HomeSubtitle />
+      {/* MAIN LAYOUT */}
+      <div className="flex justify-center gap-6 px-4 pt-6">
 
-      {/* المحتوى */}
-      <div className="flex pt-4 max-w-7xl mx-auto px-4 gap-6">
+        {/* FEED */}
+        <main className="w-full max-w-[640px]">
 
-        {/* المحتوى الرئيسي */}
-        <main className="flex-1">
+          {/* Tabs */}
+          <div className="mb-4">
+            <HomeCategories />
+          </div>
 
-          {/* الأقسام */}
-          <HomeCategories />
-
-          {/* المنشورات */}
-          <HomeFeed />
+          {/* Posts */}
+          <div className="space-y-4">
+            <HomeFeed />
+          </div>
 
         </main>
 
-        {/* نرجع السايدبار القديم بدل الجديد */}
-        <RightSidebar />
+        {/* SIDEBAR */}
+        <aside className="hidden lg:block w-[300px] shrink-0">
+          <RightSidebar />
+        </aside>
 
       </div>
 
