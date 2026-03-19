@@ -11,7 +11,7 @@ export function HomeCategories() {
   return (
     <div className="sticky top-[96px] z-30 border-b border-border/40 bg-background/80 backdrop-blur">
 
-      <div className="max-w-2xl ml-auto pr-4 pl-4 mr-[320px] flex gap-2 overflow-x-auto">
+      <div className="max-w-2xl mx-auto px-4 flex gap-2 overflow-x-auto">
 
         {tabs.map((tab) => {
           const isActive = active === tab;

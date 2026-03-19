@@ -20,7 +20,7 @@ export function HomePage() {
       <div className="flex pt-4">
 
         {/* المحتوى الرئيسي */}
-        <main className="flex-1 mr-80">
+        <main className="flex-1 pr-[300px]">
 
           {/* الأقسام */}
           <HomeCategories />
