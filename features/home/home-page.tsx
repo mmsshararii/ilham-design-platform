@@ -2,9 +2,9 @@
 
 import { HomeHeader } from './components/home-header';
 import { HomeSubtitle } from './components/home-subtitle';
-import { HomeSidebar } from './components/home-sidebar';
 import { HomeCategories } from './components/home-categories';
 import { HomeFeed } from './components/home-feed';
+import { RightSidebar } from '@/components/layout/right-sidebar';
 
 export function HomePage() {
   return (
@@ -16,12 +16,10 @@ export function HomePage() {
       {/* النص تحت اللوقو */}
       <HomeSubtitle />
 
+      {/* المحتوى */}
       <div className="flex pt-4">
 
-        {/* القائمة الجانبية */}
-        <HomeSidebar />
-
-        {/* المحتوى */}
+        {/* المحتوى الرئيسي */}
         <main className="flex-1 mr-80">
 
           {/* الأقسام */}
@@ -31,6 +29,9 @@ export function HomePage() {
           <HomeFeed />
 
         </main>
+
+        {/* نرجع السايدبار القديم بدل الجديد */}
+        <RightSidebar />
 
       </div>
 
