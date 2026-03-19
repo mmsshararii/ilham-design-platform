@@ -18,28 +18,29 @@ export function HomeCategories() {
 
           return (
             <button
-              key={tab}
-              onClick={() => setActive(tab)}
-              className={cn(
-                "relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200",
+  key={tab}
+  onClick={() => setActive(tab)}
+  className={cn(
+    "relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200",
 
-                // الحالة العادية
-                "text-muted-foreground hover:text-foreground",
+    // ❌ بدون خلفية
+    "text-muted-foreground",
 
-                // تأثير hover
-                "hover:bg-white/10 rounded-md",
+    // ✨ التأثير على النص نفسه
+    "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500",
 
-                // الحالة النشطة
-                isActive && "text-foreground"
-              )}
-            >
-              {tab}
+    // الحالة النشطة
+    active === tab &&
+      "text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500"
+  )}
+>
+  {tab}
 
-              {/* الخط السفلي */}
-              {isActive && (
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-600 to-blue-500 rounded-full" />
-              )}
-            </button>
+  {/* الخط السفلي */}
+  {active === tab && (
+    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-600 to-blue-500 rounded-full" />
+  )}
+</button>
           );
         })}
 
