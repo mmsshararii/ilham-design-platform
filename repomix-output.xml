@@ -1404,33 +1404,10 @@ export default function TermsPage() {
 </folder>
 <file path="app\page.tsx">
 <![CDATA[
-'use client';
-
-import { useAuth } from '@/lib/auth-context';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Loader as Loader2 } from 'lucide-react';
 import { HomePage } from '@/features/home/home-page';
 
 export default function Page() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() =&gt; {
-    if (!loading &amp;&amp; !user) {
-      router.push('/auth/login');
-    }
-  }, [user, loading, router]);
-
-  if (loading || !user) {
-    return (
-      &lt;div className="min-h-screen flex items-center justify-center"&gt;
-        &lt;Loader2 className="h-8 w-8 animate-spin text-purple-600" /&gt;
-      &lt;/div&gt;
-    );
-  }
-
-  return &lt;HomePage userId={user.id} /&gt;;
+  return &lt;HomePage /&gt;;
 }
 ]]>
 </file>
@@ -2118,110 +2095,8 @@ export function FloatingLogout() {
 
 ]]>
 </file>
-<file path="components\home-feed.tsx">
-<![CDATA[
-'use client';
-
-import { FeedItem } from '@/components/shared/feed-item';
-import { Loader as Loader2 } from 'lucide-react';
-
-export function HomeFeed({
-  items,
-  loading,
-  loadingMore,
-  onLike,
-  onComment,
-  onAdClick,
-}: any) {
-  if (loading &amp;&amp; items.length === 0) {
-    return (
-      &lt;div className="flex justify-center py-10"&gt;
-        &lt;Loader2 className="animate-spin" /&gt;
-      &lt;/div&gt;
-    );
-  }
-
-  return (
-    &lt;div className="max-w-2xl mx-auto"&gt;
-
-      {items.map((item: any) =&gt; (
-        &lt;FeedItem
-          key={item.id}
-          item={item}
-          onLike={onLike}
-          onComment={onComment}
-          onAdClick={onAdClick}
-        /&gt;
-      ))}
-
-      {loadingMore &amp;&amp; (
-        &lt;div className="flex justify-center py-6"&gt;
-          &lt;Loader2 className="animate-spin" /&gt;
-        &lt;/div&gt;
-      )}
-    &lt;/div&gt;
-  );
-}
-]]>
-</file>
-<file path="components\home-header.tsx">
-<![CDATA[
-'use client';
-
-export function HomeHeader() {
-  return (
-    &lt;div className="border-b border-border/40 py-6 text-center"&gt;
-      &lt;h1 className="text-2xl font-bold text-white"&gt;استلهم&lt;/h1&gt;
-    &lt;/div&gt;
-  );
-}
-]]>
-</file>
-<file path="components\home-sidebar.tsx">
-<![CDATA[
-'use client';
-
-export function HomeSidebar() {
-  return (
-    &lt;aside className="w-64 p-4 hidden md:block"&gt;
-      &lt;div className="bg-card p-4 rounded-lg"&gt;
-        القائمة الجانبية
-      &lt;/div&gt;
-    &lt;/aside&gt;
-  );
-}
-]]>
-</file>
-<file path="components\home-tabs.tsx">
-<![CDATA[
-'use client';
-
-import { CategoryTabs } from '@/components/layout/category-tabs';
-import { FeedTab } from '@/types/feed';
-
-interface Props {
-  activeTab: FeedTab;
-  onTabChange: (tab: FeedTab) =&gt; void;
-}
-
-export function HomeTabs(props: Props) {
-  return &lt;CategoryTabs {...props} /&gt;;
-}
-]]>
-</file>
-<file path="components\home-tagline.tsx">
-<![CDATA[
-'use client';
-
-export function HomeTagline() {
-  return (
-    &lt;div className="text-center text-sm text-muted-foreground mb-4"&gt;
-      استكشف التصاميم والإبداعات
-    &lt;/div&gt;
-  );
-}
-]]>
-</file>
+<folder path="components\home">
+</folder>
 <folder path="components\layout">
 <file path="components\layout\category-tabs.tsx">
 <![CDATA[
@@ -2373,7 +2248,7 @@ export function RightSidebar() {
   const { signOut } = useAuth();
 
   return (
-    &lt;aside className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border/40 bg-background p-4 flex flex-col z-30"&gt;
+    &lt;aside className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border/40 bg-background p-4 flex flex-col z-20"&gt;
       &lt;div className="space-y-4 flex-1"&gt;
         &lt;Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"&gt;
           إنشاء منشور
@@ -7524,53 +7399,246 @@ export function useFeed({ userId }: UseFeedParams) {
 </file>
 </folder>
 <folder path="features\home">
+<folder path="features\home\components">
+<file path="features\home\components\home-categories.tsx">
+<![CDATA[
+'use client';
+
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+
+const tabs = ['مخصص', 'منشورات عامة', 'تصاميم', 'طلبات', 'عروض', 'ملحقات'];
+
+export function HomeCategories() {
+  const [active, setActive] = useState('مخصص');
+
+  return (
+    &lt;div className="sticky top-[96px] z-30 border-b border-border/40 bg-background/80 backdrop-blur"&gt;
+      
+      &lt;div className="max-w-[600px] w-full px-4 flex gap-4 overflow-x-auto overflow-y-visible"&gt;
+        
+        {tabs.map((tab) =&gt; {
+          const isActive = active === tab;
+
+          return (
+            &lt;button
+              key={tab}
+              onClick={() =&gt; setActive(tab)}
+              className="relative px-4 py-3 text-sm font-medium whitespace-nowrap"
+            &gt;
+              
+              {/* =======================
+                  🎨 TEXT STATE
+              ======================= */}
+              &lt;span
+                className={cn(
+                  "transition-colors duration-200",
+
+                  // الوضع الطبيعي
+                  "text-muted-foreground",
+
+                  // Hover
+                  "hover:text-purple-400",
+
+                  // Active
+                  isActive &amp;&amp; "text-purple-500 font-semibold"
+                )}
+              &gt;
+                {tab}
+              &lt;/span&gt;
+
+              {/* =======================
+                  📍 UNDERLINE
+              ======================= */}
+              &lt;span
+                className={cn(
+                  "absolute -bottom-[3px] left-2 right-2 h-[2px] rounded-full transition-all duration-300",
+                  isActive ? "bg-purple-500 opacity-100" : "opacity-0"
+                )}
+              /&gt;
+
+            &lt;/button&gt;
+          );
+        })}
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="features\home\components\home-feed.tsx">
+<![CDATA[
+'use client';
+
+export function HomeFeed() {
+  return (
+    &lt;div className="max-w-2xl mx-auto p-4 space-y-4"&gt;
+
+      &lt;div className="border rounded-lg p-4"&gt;
+        هذا منشور تجريبي
+      &lt;/div&gt;
+
+      &lt;div className="border rounded-lg p-4"&gt;
+        منشور ثاني
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="features\home\components\home-header.tsx">
+<![CDATA[
+'use client';
+
+import { Search, Bell, Flame, Users } from 'lucide-react';
+
+export function HomeHeader() {
+  return (
+    &lt;div className="fixed top-0 right-0 left-0 h-16 border-b border-border/40 bg-background/80 backdrop-blur z-50"&gt;
+
+      &lt;div className="max-w-7xl mx-auto h-full flex items-center gap-6 px-4"&gt;
+
+        {/* 1️⃣ اللوقو */}
+        &lt;div className="font-bold text-xl whitespace-nowrap"&gt;
+          استلهم
+        &lt;/div&gt;
+
+        {/* 2️⃣ البحث */}
+        &lt;div className="flex-1 max-w-md"&gt;
+          &lt;div className="relative"&gt;
+            &lt;Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /&gt;
+
+            &lt;input
+              type="text"
+              placeholder="ابحث عن أي شيء..."
+              className="w-full pr-10 pl-4 py-2 rounded-md bg-white/5 border border-border/40 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+            /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        {/* 3️⃣ الترند */}
+        &lt;button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition whitespace-nowrap"&gt;
+          &lt;Flame className="w-4 h-4" /&gt;
+          الترند
+        &lt;/button&gt;
+
+        {/* 4️⃣ المتابعين */}
+        &lt;button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition whitespace-nowrap"&gt;
+          &lt;Users className="w-4 h-4" /&gt;
+          المتابعين
+        &lt;/button&gt;
+
+        {/* 5️⃣ الاشعارات */}
+        &lt;button className="relative text-muted-foreground hover:text-foreground transition"&gt;
+          &lt;Bell className="w-5 h-5" /&gt;
+
+          &lt;span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+
+        {/* 6️⃣ اسم المستخدم */}
+        &lt;div className="text-sm text-muted-foreground whitespace-nowrap"&gt;
+          محمد
+        &lt;/div&gt;
+
+        {/* 7️⃣ الصورة المستطيلة */}
+        &lt;div className="w-14 h-8 rounded-md bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-xs font-bold"&gt;
+          IMG
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="features\home\components\home-subtitle.tsx">
+<![CDATA[
+'use client';
+
+export function HomeSubtitle() {
+  return (
+    &lt;div className="pt-16 border-b border-border/40 bg-background"&gt;
+      &lt;div className="max-w-2xl mx-auto px-4 py-2 text-sm text-muted-foreground"&gt;
+        استكشف التصاميم والإبداعات من المصممين حول العالم
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="features\home\components\home-tabs.tsx">
+<![CDATA[
+'use client';
+
+import { CategoryTabs } from '@/components/layout/category-tabs';
+import { FeedTab } from '@/types/feed';
+
+interface Props {
+  activeTab: FeedTab;
+  onTabChange: (tab: FeedTab) =&gt; void;
+}
+
+export function HomeTabs(props: Props) {
+  return &lt;CategoryTabs {...props} /&gt;;
+}
+]]>
+</file>
+<file path="features\home\components\home-tagline.tsx">
+<![CDATA[
+'use client';
+
+export function HomeTagline() {
+  return (
+    &lt;div className="text-center text-sm text-muted-foreground mb-4"&gt;
+      استكشف التصاميم والإبداعات
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+</folder>
 <file path="features\home\home-page.tsx">
 <![CDATA[
 'use client';
 
 import { HomeHeader } from './components/home-header';
-import { HomeTagline } from './components/home-tagline';
-import { HomeTabs } from './components/home-tabs';
+import { HomeSubtitle } from './components/home-subtitle';
+import { HomeCategories } from './components/home-categories';
 import { HomeFeed } from './components/home-feed';
-import { HomeSidebar } from './components/home-sidebar';
+import { RightSidebar } from '@/components/layout/right-sidebar';
 
-import { useFeed } from '@/features/feed/hooks/use-feed';
-
-interface Props {
-  userId: string;
-}
-
-export function HomePage({ userId }: Props) {
-  const feed = useFeed({ userId });
-
+export function HomePage() {
   return (
     &lt;div className="min-h-screen bg-background"&gt;
 
+      {/* الهيدر */}
       &lt;HomeHeader /&gt;
 
-      &lt;HomeTagline /&gt;
+      {/* النص تحت اللوقو */}
+      &lt;HomeSubtitle /&gt;
 
-      &lt;div className="flex max-w-6xl mx-auto"&gt;
+      {/* المحتوى */}
+      &lt;div className="flex pt-4"&gt;
 
-        &lt;HomeSidebar /&gt;
+        {/* المحتوى الرئيسي */}
+        &lt;main className="flex-1 pr-[300px]"&gt;
 
-        &lt;main className="flex-1"&gt;
-          &lt;HomeTabs
-            activeTab={feed.activeTab}
-            onTabChange={feed.handleTabChange}
-          /&gt;
+          {/* الأقسام */}
+          &lt;HomeCategories /&gt;
 
-          &lt;HomeFeed
-            items={feed.items}
-            loading={feed.loading}
-            loadingMore={feed.loadingMore}
-            onLike={feed.handleLike}
-            onComment={feed.handleComment}
-            onAdClick={feed.handleAdClick}
-          /&gt;
+          {/* المنشورات */}
+          &lt;HomeFeed /&gt;
+
         &lt;/main&gt;
 
+        {/* نرجع السايدبار القديم بدل الجديد */}
+        &lt;RightSidebar /&gt;
+
       &lt;/div&gt;
+
     &lt;/div&gt;
   );
 }
@@ -8804,6 +8872,64 @@ The Ilham (استلهم) platform now includes:
 **End of Verification Report**
 **All requested features implemented and verified in the UI**
 
+]]>
+</file>
+<file path="generate-repo.js">
+<![CDATA[
+const fs = require("fs");
+const path = require("path");
+
+const rootDir = process.cwd();
+const outputFile = "repomix-output.xml";
+
+const ignore = ["node_modules", ".git", ".next", "dist", "build"];
+
+function readDirRecursive(dir) {
+  let result = "";
+
+  const items = fs.readdirSync(dir);
+
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const relativePath = path.relative(rootDir, fullPath);
+
+    if (ignore.some((i) =&gt; fullPath.includes(i))) continue;
+
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      result += `&lt;folder path="${relativePath}"&gt;\n`;
+      result += readDirRecursive(fullPath);
+      result += `&lt;/folder&gt;\n`;
+    } else {
+      let content = "";
+
+      try {
+        content = fs.readFileSync(fullPath, "utf-8")
+          .replace(/&amp;/g, "&amp;amp;")
+          .replace(/&lt;/g, "&amp;lt;")
+          .replace(/&gt;/g, "&amp;gt;");
+      } catch {
+        content = "[BINARY FILE]";
+      }
+
+      result += `&lt;file path="${relativePath}"&gt;\n`;
+      result += `&lt;![CDATA[\n${content}\n]]&gt;\n`;
+      result += `&lt;/file&gt;\n`;
+    }
+  }
+
+  return result;
+}
+
+const xml =
+  `&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;project&gt;\n` +
+  readDirRecursive(rootDir) +
+  `&lt;/project&gt;`;
+
+fs.writeFileSync(outputFile, xml);
+
+console.log("✅ تم إنشاء الملف:", outputFile);
 ]]>
 </file>
 <folder path="hooks">
@@ -18374,7 +18500,7 @@ const xml =
 
 fs.writeFileSync(outputFile, xml);
 
-console.log("✅ تم إنشاء repomix-output.xml");
+console.log("✅ تم إنشاء ");
 ]]>
 </file>
 <folder path="services">

@@ -18,7 +18,7 @@ export function RightSidebar() {
   const { signOut } = useAuth();
 
   return (
-    <aside className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border/40 bg-background p-4 flex flex-col z-20">
+    <aside className="w-80 shrink-0 border-l border-border/40 bg-background p-4 flex flex-col">
       <div className="space-y-4 flex-1">
         <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
           إنشاء منشور
