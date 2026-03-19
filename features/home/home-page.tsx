@@ -17,10 +17,10 @@ export function HomePage() {
       <HomeSubtitle />
 
       {/* المحتوى */}
-      <div className="flex pt-4 w-full max-w-[1200px] mx-auto gap-6">
+      <div className="flex pt-4 max-w-7xl mx-auto px-4 gap-6">
 
         {/* المحتوى الرئيسي */}
-        <main className="flex-1 max-w-2xl">
+        <main className="flex-1">
 
           {/* الأقسام */}
           <HomeCategories />
