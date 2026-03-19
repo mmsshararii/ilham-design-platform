@@ -1,16 +1,31 @@
 'use client';
 
-type ToastOptions = {
+import { useState } from 'react';
+
+type Toast = {
+  id: string;
   title?: string;
   description?: string;
 };
 
 export function useToast() {
-  function toast({ title, description }: ToastOptions) {
-    console.log('Toast:', title, description);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  function toast({ title, description }: Omit<Toast, 'id'>) {
+    const id = Math.random().toString();
+
+    setToasts((prev) => [
+      ...prev,
+      { id, title, description },
+    ]);
+
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3000);
   }
 
   return {
     toast,
+    toasts,
   };
 }
