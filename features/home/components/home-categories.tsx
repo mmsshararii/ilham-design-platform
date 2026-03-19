@@ -11,12 +11,12 @@ export function HomeCategories() {
   return (
     <div className="sticky top-[96px] z-30 border-b border-border/40 bg-background/80 backdrop-blur">
       
-      <div className="max-w-[600px] w-full px-4 flex gap-4 overflow-x-auto overflow-y-visible">
+      <div className="w-full px-4 flex gap-4 overflow-x-auto">
         
         {tabs.map((tab) => {
           const isActive = active === tab;
 
-          return (
+          return (                                                                                                                          
             <button
               key={tab}
               onClick={() => setActive(tab)}
