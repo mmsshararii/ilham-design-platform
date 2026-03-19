@@ -24,17 +24,16 @@ export function HomeCategories() {
 >
   <span
     className={cn(
-      "transition-all duration-200",
+      "transition-colors duration-200",
 
       // الوضع الطبيعي
       "text-muted-foreground",
 
-      // 👇 Hover (على النص فقط)
-      "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500",
+      // 👇 Hover (لون بنفسجي فقط)
+      "hover:text-purple-400",
 
       // 👇 Active
-      active === tab &&
-        "text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 font-semibold"
+      active === tab && "text-purple-500 font-semibold"
     )}
   >
     {tab}
@@ -43,9 +42,9 @@ export function HomeCategories() {
   {/* الخط السفلي */}
   <span
     className={cn(
-      "absolute bottom-0 left-0 right-0 h-[2px] rounded-full transition-all duration-300",
+      "absolute bottom-0 left-0 right-0 h-[2px] transition-all duration-300",
       active === tab
-        ? "bg-gradient-to-r from-purple-500 to-blue-500 opacity-100"
+        ? "bg-purple-500 opacity-100"
         : "opacity-0"
     )}
   />
