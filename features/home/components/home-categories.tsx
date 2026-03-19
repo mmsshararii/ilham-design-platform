@@ -22,20 +22,14 @@ export function HomeCategories() {
   onClick={() => setActive(tab)}
   className="relative px-4 py-3 text-sm font-medium whitespace-nowrap"
 >
-  <span
-    className={cn(
-      "transition-colors duration-200",
-
-      // الوضع الطبيعي
-      "text-muted-foreground",
-
-      // 👇 Hover (لون بنفسجي فقط)
-      "hover:text-purple-400",
-
-      // 👇 Active
-      active === tab && "text-purple-500 font-semibold"
-    )}
-  >
+<span
+  className={cn(
+    "absolute -bottom-[2px] left-0 right-0 h-[2px] rounded-full transition-all duration-300",
+    active === tab
+      ? "bg-purple-500 opacity-100"
+      : "opacity-0"
+  )}
+/>
     {tab}
   </span>
 
