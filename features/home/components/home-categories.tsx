@@ -17,28 +17,27 @@ export function HomeCategories() {
           const isActive = active === tab;
 
           return (
-            <button
+<button
   key={tab}
   onClick={() => setActive(tab)}
   className={cn(
     "relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200",
 
-    // ❌ بدون خلفية
+    // الوضع الطبيعي
     "text-muted-foreground",
 
-    // ✨ التأثير على النص نفسه
-    "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500",
+    // 👇 Hover (تأثير على النص فقط)
+    "hover:text-foreground",
 
-    // الحالة النشطة
-    active === tab &&
-      "text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500"
+    // 👇 Active
+    active === tab && "text-foreground font-semibold"
   )}
 >
   {tab}
 
-  {/* الخط السفلي */}
+  {/* 👇 الخط السفلي (يظهر فقط عند التفعيل) */}
   {active === tab && (
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-600 to-blue-500 rounded-full" />
+    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-purple-500 rounded-full" />
   )}
 </button>
           );
