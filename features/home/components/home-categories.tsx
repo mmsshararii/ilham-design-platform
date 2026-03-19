@@ -21,24 +21,30 @@ export function HomeCategories() {
   key={tab}
   onClick={() => setActive(tab)}
   className={cn(
-    "relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200",
+    "relative px-4 pt-3 pb-4 text-sm font-medium whitespace-nowrap transition-all duration-200",
 
     // الوضع الطبيعي
     "text-muted-foreground",
 
-    // 👇 Hover (تأثير على النص فقط)
-    "hover:text-foreground",
+    // 👇 Hover (خلّه واضح)
+    "hover:text-white",
 
     // 👇 Active
-    active === tab && "text-foreground font-semibold"
+    active === tab && "text-white font-semibold"
   )}
 >
   {tab}
 
-  {/* 👇 الخط السفلي (يظهر فقط عند التفعيل) */}
-  {active === tab && (
-    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-purple-500 rounded-full" />
-  )}
+  {/* 👇 الخط السفلي */}
+  <span
+    className={cn(
+      "absolute bottom-0 left-0 right-0 h-[3px] rounded-full transition-all duration-300",
+
+      active === tab
+        ? "bg-purple-500 opacity-100"
+        : "opacity-0"
+    )}
+  />
 </button>
           );
         })}
