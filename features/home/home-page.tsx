@@ -31,7 +31,7 @@ export function HomePage() {
         </main>
 
         {/* SIDEBAR */}
-        <aside className="hidden lg:block w-[300px] shrink-0">
+        <aside className="block w-[300px] shrink-0">
           <RightSidebar />
         </aside>
 
