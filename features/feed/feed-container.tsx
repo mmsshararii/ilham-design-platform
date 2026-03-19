@@ -37,7 +37,7 @@ export function FeedContainer({
     <div className="min-h-screen bg-background">
       <MainHeader />
 
-      <div className="pt-16 flex">
+      <div className="pt-[100px] flex">
         <RightSidebar />
 
         <main className="flex-1 mr-80">

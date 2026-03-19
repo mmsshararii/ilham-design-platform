@@ -2,23 +2,18 @@
 
 export function MainHeader() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+    <header className="fixed top-0 right-0 left-0 z-50 bg-background/80 backdrop-blur border-b border-border/40">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col items-center gap-1">
 
-        {/* RIGHT: Logo + Text */}
-        <div className="flex flex-col items-start">
-          <span className="text-lg font-bold">استلهم</span>
-          <span className="text-xs text-muted-foreground">
-            استكشف التصاميم والإبداعات
-          </span>
-        </div>
+        {/* الشعار */}
+        <h1 className="text-xl font-bold text-white">
+          استلهم
+        </h1>
 
-        {/* LEFT: Trend */}
-        <div className="flex items-center gap-4">
-          <button className="text-sm text-muted-foreground hover:text-foreground">
-            الترند ↗
-          </button>
-        </div>
+        {/* الوصف */}
+        <p className="text-xs text-muted-foreground">
+          استكشف التصاميم والإبداعات
+        </p>
 
       </div>
     </header>

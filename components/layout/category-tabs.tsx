@@ -18,7 +18,7 @@ const tabs = [
 
 export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
   return (
-    <div className="sticky top-16 z-40 border-b border-border bg-background">
+    <div className="sticky top-[70px] z-40 border-b border-border/40 bg-background/80 backdrop-blur">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide px-2">
 
