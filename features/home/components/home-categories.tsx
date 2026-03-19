@@ -26,18 +26,26 @@ export function HomeCategories() {
     // الوضع الطبيعي
     "text-muted-foreground",
 
-    // Hover بسيط فقط
-    "hover:text-white",
+    // 👇 Hover (gradient على النص فقط)
+    "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500",
 
-    // Active
-    active === tab && "text-white font-semibold"
+    // 👇 Active
+    active === tab &&
+      "text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 font-semibold"
   )}
 >
   {tab}
 
-  {active === tab && (
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-purple-500 rounded-full" />
-  )}
+  {/* 👇 الخط السفلي */}
+  <span
+    className={cn(
+      "absolute bottom-0 left-0 right-0 h-[2px] rounded-full transition-all duration-300",
+
+      active === tab
+        ? "bg-gradient-to-r from-purple-500 to-blue-500 opacity-100"
+        : "opacity-0"
+    )}
+  />
 </button>
           );
         })}
