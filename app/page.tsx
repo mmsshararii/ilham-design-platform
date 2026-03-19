@@ -11,6 +11,9 @@ export default function HomePage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
+  // ✅ لازم يكون فوق أي return
+  const feed = useFeed({ userId: user?.id || '' });
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/auth/login');
@@ -24,8 +27,6 @@ export default function HomePage() {
       </div>
     );
   }
-
-  const feed = useFeed({ userId: user.id });
 
   return (
     <FeedContainer
