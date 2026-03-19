@@ -1,48 +1,39 @@
 'use client';
 
 import { HomeHeader } from './components/home-header';
-import { HomeTagline } from './components/home-tagline';
-import { HomeTabs } from './components/home-tabs';
-import { HomeFeed } from './components/home-feed';
+import { HomeSubtitle } from './components/home-subtitle';
 import { HomeSidebar } from './components/home-sidebar';
+import { HomeCategories } from './components/home-categories';
+import { HomeFeed } from './components/home-feed';
 
-import { useFeed } from '@/features/feed/hooks/use-feed';
-
-interface Props {
-  userId: string;
-}
-
-export function HomePage({ userId }: Props) {
-  const feed = useFeed({ userId });
-
+export function HomePage() {
   return (
     <div className="min-h-screen bg-background">
 
+      {/* الهيدر */}
       <HomeHeader />
 
-      <HomeTagline />
+      {/* النص تحت اللوقو */}
+      <HomeSubtitle />
 
-      <div className="flex max-w-6xl mx-auto">
+      <div className="flex pt-4">
 
+        {/* القائمة الجانبية */}
         <HomeSidebar />
 
-        <main className="flex-1">
-          <HomeTabs
-            activeTab={feed.activeTab}
-            onTabChange={feed.handleTabChange}
-          />
+        {/* المحتوى */}
+        <main className="flex-1 mr-80">
 
-          <HomeFeed
-            items={feed.items}
-            loading={feed.loading}
-            loadingMore={feed.loadingMore}
-            onLike={feed.handleLike}
-            onComment={feed.handleComment}
-            onAdClick={feed.handleAdClick}
-          />
+          {/* الأقسام */}
+          <HomeCategories />
+
+          {/* المنشورات */}
+          <HomeFeed />
+
         </main>
 
       </div>
+
     </div>
   );
 }

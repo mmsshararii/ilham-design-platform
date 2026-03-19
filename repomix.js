@@ -51,4 +51,4 @@ const xml =
 
 fs.writeFileSync(outputFile, xml);
 
-console.log("✅ تم إنشاء repomix-output.xml");
+console.log("✅ تم إنشاء ");

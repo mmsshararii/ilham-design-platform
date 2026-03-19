@@ -1406,46 +1406,32 @@ export default function TermsPage() {
 <![CDATA[
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { FeedContainer } from '@/features/feed/feed-container';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { Loader as Loader2 } from 'lucide-react';
+import { HomePage } from '@/features/home/home-page';
 
-// 🔥 أضف هذا الاستيراد (تأكد من المسار الصحيح)
-import { CategoryTabs } from '@/components/category-tabs';
-
-export default function HomePage() {
-  const { user, loading: authLoading } = useAuth();
+export default function Page() {
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() =&gt; {
-    if (!authLoading &amp;&amp; !user) {
+    if (!loading &amp;&amp; !user) {
       router.push('/auth/login');
     }
-  }, [user, authLoading, router]);
+  }, [user, loading, router]);
 
-  if (authLoading || !user) {
+  if (loading || !user) {
     return (
       &lt;div className="min-h-screen flex items-center justify-center"&gt;
-        &lt;Loader2 className="h-8 w-8 animate-spin text-blue-600" /&gt;
+        &lt;Loader2 className="h-8 w-8 animate-spin text-purple-600" /&gt;
       &lt;/div&gt;
     );
   }
 
-  return (
-    &lt;main className="flex flex-col gap-4"&gt;
-
-      {/* 🔥 الأقسام هنا (ثابتة فوق المنشورات) */}
-      &lt;CategoryTabs /&gt;
-
-      {/* 🔥 المنشورات */}
-      &lt;FeedContainer userId={user.id} /&gt;
-
-    &lt;/main&gt;
-  );
+  return &lt;HomePage userId={user.id} /&gt;;
 }
-
 ]]>
 </file>
 </folder>
@@ -2132,6 +2118,110 @@ export function FloatingLogout() {
 
 ]]>
 </file>
+<file path="components\home-feed.tsx">
+<![CDATA[
+'use client';
+
+import { FeedItem } from '@/components/shared/feed-item';
+import { Loader as Loader2 } from 'lucide-react';
+
+export function HomeFeed({
+  items,
+  loading,
+  loadingMore,
+  onLike,
+  onComment,
+  onAdClick,
+}: any) {
+  if (loading &amp;&amp; items.length === 0) {
+    return (
+      &lt;div className="flex justify-center py-10"&gt;
+        &lt;Loader2 className="animate-spin" /&gt;
+      &lt;/div&gt;
+    );
+  }
+
+  return (
+    &lt;div className="max-w-2xl mx-auto"&gt;
+
+      {items.map((item: any) =&gt; (
+        &lt;FeedItem
+          key={item.id}
+          item={item}
+          onLike={onLike}
+          onComment={onComment}
+          onAdClick={onAdClick}
+        /&gt;
+      ))}
+
+      {loadingMore &amp;&amp; (
+        &lt;div className="flex justify-center py-6"&gt;
+          &lt;Loader2 className="animate-spin" /&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="components\home-header.tsx">
+<![CDATA[
+'use client';
+
+export function HomeHeader() {
+  return (
+    &lt;div className="border-b border-border/40 py-6 text-center"&gt;
+      &lt;h1 className="text-2xl font-bold text-white"&gt;استلهم&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<file path="components\home-sidebar.tsx">
+<![CDATA[
+'use client';
+
+export function HomeSidebar() {
+  return (
+    &lt;aside className="w-64 p-4 hidden md:block"&gt;
+      &lt;div className="bg-card p-4 rounded-lg"&gt;
+        القائمة الجانبية
+      &lt;/div&gt;
+    &lt;/aside&gt;
+  );
+}
+]]>
+</file>
+<file path="components\home-tabs.tsx">
+<![CDATA[
+'use client';
+
+import { CategoryTabs } from '@/components/layout/category-tabs';
+import { FeedTab } from '@/types/feed';
+
+interface Props {
+  activeTab: FeedTab;
+  onTabChange: (tab: FeedTab) =&gt; void;
+}
+
+export function HomeTabs(props: Props) {
+  return &lt;CategoryTabs {...props} /&gt;;
+}
+]]>
+</file>
+<file path="components\home-tagline.tsx">
+<![CDATA[
+'use client';
+
+export function HomeTagline() {
+  return (
+    &lt;div className="text-center text-sm text-muted-foreground mb-4"&gt;
+      استكشف التصاميم والإبداعات
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
 <folder path="components\layout">
 <file path="components\layout\category-tabs.tsx">
 <![CDATA[
@@ -2155,15 +2245,16 @@ const tabs = [
 
 export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
   return (
-    &lt;div className="border-b border-border/40 bg-background"&gt;
+    &lt;div className="sticky top-[70px] z-40 border-b border-border/40 bg-background/80 backdrop-blur"&gt;
       &lt;div className="max-w-2xl mx-auto"&gt;
-        &lt;div className="flex items-center gap-1 overflow-x-auto scrollbar-hide"&gt;
+        &lt;div className="flex items-center gap-2 overflow-x-auto scrollbar-hide px-2"&gt;
+
           {tabs.map((tab) =&gt; (
             &lt;button
               key={tab.id}
               onClick={() =&gt; onTabChange(tab.id)}
               className={cn(
-                "relative px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap",
+                "relative px-5 py-3 text-sm font-medium whitespace-nowrap transition-all",
                 "hover:text-foreground",
                 activeTab === tab.id
                   ? "text-foreground"
@@ -2171,17 +2262,18 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
               )}
             &gt;
               {tab.label}
+
               {activeTab === tab.id &amp;&amp; (
-                &lt;div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-500" /&gt;
+                &lt;span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-600 to-blue-500" /&gt;
               )}
             &lt;/button&gt;
           ))}
+
         &lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   );
 }
-
 ]]>
 </file>
 <file path="components\layout\feed-tabs.tsx">
@@ -2238,52 +2330,25 @@ export function FeedTabs({ activeTab, onTabChange }: FeedTabsProps) {
 <![CDATA[
 'use client';
 
-import { Bell, Users, Chrome as Home } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-
 export function MainHeader() {
   return (
-    &lt;header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"&gt;
-      &lt;div className="h-16 px-6 flex items-center justify-between gap-8"&gt;
-        &lt;div className="flex items-center gap-4 order-3"&gt;
-          &lt;Link href="/trending" className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"&gt;
-            &lt;span&gt;الترند&lt;/span&gt;
-            &lt;span className="text-lg"&gt;↗&lt;/span&gt;
-          &lt;/Link&gt;
-          &lt;Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground"&gt;
-            &lt;Bell className="h-5 w-5" /&gt;
-          &lt;/Button&gt;
-          &lt;Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground"&gt;
-            &lt;Users className="h-5 w-5" /&gt;
-          &lt;/Button&gt;
-          &lt;Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground"&gt;
-            &lt;Home className="h-5 w-5" /&gt;
-          &lt;/Button&gt;
-        &lt;/div&gt;
+    &lt;header className="fixed top-0 right-0 left-0 z-50 bg-background/80 backdrop-blur border-b border-border/40"&gt;
+      &lt;div className="max-w-6xl mx-auto px-4 py-3 flex flex-col items-center gap-1"&gt;
 
-        &lt;div className="flex-1 max-w-xl mx-auto order-2"&gt;
-          &lt;Input
-            type="search"
-            placeholder="ابحث عن أي شيء..."
-            className="w-full bg-muted/50 border-border/40 text-right"
-          /&gt;
-        &lt;/div&gt;
+        {/* الشعار */}
+        &lt;h1 className="text-xl font-bold text-white"&gt;
+          استلهم
+        &lt;/h1&gt;
 
-        &lt;Link href="/" className="flex flex-col items-end gap-0.5 order-1"&gt;
-          &lt;span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none"&gt;
-            استلهم
-          &lt;/span&gt;
-          &lt;span className="text-[10px] text-muted-foreground/60 leading-tight text-right max-w-[200px]"&gt;
-            استكشف التصاميم والإبداعات من المصممين حول العالم
-          &lt;/span&gt;
-        &lt;/Link&gt;
+        {/* الوصف */}
+        &lt;p className="text-xs text-muted-foreground"&gt;
+          استكشف التصاميم والإبداعات
+        &lt;/p&gt;
+
       &lt;/div&gt;
     &lt;/header&gt;
   );
 }
-
 ]]>
 </file>
 <file path="components\layout\right-sidebar.tsx">
@@ -7203,12 +7268,9 @@ export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
 <![CDATA[
 'use client';
 
-import { useState, useEffect } from 'react';
 import { FeedTab } from '@/types/feed';
 import { FeedItem as FeedItemType } from '@/types/feed';
-import { getFeed } from '@/services/feed.service';
-import { likePost, unlikePost } from '@/services/post.service';
-import { trackAdClick } from '@/services/ads.service';
+
 import { MainHeader } from '@/components/layout/main-header';
 import { RightSidebar } from '@/components/layout/right-sidebar';
 import { CategoryTabs } from '@/components/layout/category-tabs';
@@ -7217,36 +7279,112 @@ import { Loader as Loader2 } from 'lucide-react';
 
 interface FeedContainerProps {
   userId: string;
+  items: FeedItemType[];
+  loading: boolean;
+  loadingMore?: boolean;
+  activeTab: FeedTab;
+  onTabChange: (tab: FeedTab) =&gt; void;
+  onLoadMore: () =&gt; void;
+  onLike: (postId: string) =&gt; void;
+  onComment: (postId: string) =&gt; void;
+  onAdClick: (adId: string) =&gt; void;
 }
 
-export function FeedContainer({ userId }: FeedContainerProps) {
+export function FeedContainer({
+  items,
+  loading,
+  loadingMore,
+  activeTab,
+  onTabChange,
+  onLoadMore,
+  onLike,
+  onComment,
+  onAdClick,
+}: FeedContainerProps) {
+  return (
+    &lt;div className="min-h-screen bg-background"&gt;
+      &lt;MainHeader /&gt;
+
+      &lt;div className="pt-[100px] flex"&gt;
+        &lt;RightSidebar /&gt;
+
+        &lt;main className="flex-1 mr-80"&gt;
+          &lt;CategoryTabs
+            activeTab={activeTab}
+            onTabChange={onTabChange}
+          /&gt;
+
+          &lt;div className="max-w-2xl mx-auto"&gt;
+            {loading &amp;&amp; items.length === 0 ? (
+              &lt;div className="flex items-center justify-center py-12"&gt;
+                &lt;Loader2 className="h-8 w-8 animate-spin text-purple-600" /&gt;
+              &lt;/div&gt;
+            ) : items.length === 0 ? (
+              &lt;div className="text-center py-12 px-4"&gt;
+                &lt;p className="text-muted-foreground"&gt;لا توجد منشورات&lt;/p&gt;
+              &lt;/div&gt;
+            ) : (
+              &lt;&gt;
+                {items.map((item) =&gt; (
+                  &lt;FeedItem
+                    key={item.id}
+                    item={item}
+                    onLike={onLike}
+                    onComment={onComment}
+                    onAdClick={onAdClick}
+                  /&gt;
+                ))}
+
+                &lt;div className="flex justify-center py-6"&gt;
+                  &lt;button
+                    onClick={onLoadMore}
+                    disabled={loadingMore}
+                    className="px-4 py-2 rounded-md bg-primary text-white"
+                  &gt;
+                    {loadingMore ? 'جاري التحميل...' : 'تحميل المزيد'}
+                  &lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/main&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+<folder path="features\feed\hooks">
+<file path="features\feed\hooks\use-feed.ts">
+<![CDATA[
+'use client';
+
+import { useEffect, useState } from 'react';
+import { FeedTab, FeedItem } from '@/types/feed';
+import { getFeed } from '@/services/feed.service';
+import { likePost, unlikePost } from '@/services/post.service';
+import { trackAdClick } from '@/services/ads.service';
+
+interface UseFeedParams {
+  userId: string;
+}
+
+export function useFeed({ userId }: UseFeedParams) {
   const [activeTab, setActiveTab] = useState&lt;FeedTab&gt;('custom');
-  const [feedItems, setFeedItems] = useState&lt;FeedItemType[]&gt;([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState&lt;FeedItem[]&gt;([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
+  // تحميل أولي
   useEffect(() =&gt; {
     loadFeed();
   }, [activeTab]);
 
-  useEffect(() =&gt; {
-    const handleScroll = () =&gt; {
-      if (
-        window.innerHeight + window.scrollY &gt;= document.documentElement.scrollHeight - 500 &amp;&amp;
-        hasMore &amp;&amp;
-        !isLoading
-      ) {
-        loadMore();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () =&gt; window.removeEventListener('scroll', handleScroll);
-  }, [hasMore, isLoading, page]);
-
   async function loadFeed() {
-    setIsLoading(true);
+    setLoading(true);
+
     try {
       const response = await getFeed({
         tab: activeTab,
@@ -7254,20 +7392,22 @@ export function FeedContainer({ userId }: FeedContainerProps) {
         page: 1,
         limit: 20,
       });
-      setFeedItems(response.items);
+
+      setItems(response.items);
       setHasMore(response.meta.hasMore);
       setPage(1);
     } catch (error) {
-      console.error('Failed to load feed:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Feed load error:', error);
     }
+
+    setLoading(false);
   }
 
   async function loadMore() {
-    if (!hasMore || isLoading) return;
+    if (!hasMore || loadingMore) return;
 
-    setIsLoading(true);
+    setLoadingMore(true);
+
     try {
       const response = await getFeed({
         tab: activeTab,
@@ -7275,24 +7415,28 @@ export function FeedContainer({ userId }: FeedContainerProps) {
         page: page + 1,
         limit: 20,
       });
-      setFeedItems([...feedItems, ...response.items]);
+
+      setItems((prev) =&gt; [...prev, ...response.items]);
       setHasMore(response.meta.hasMore);
-      setPage(page + 1);
+      setPage((prev) =&gt; prev + 1);
     } catch (error) {
-      console.error('Failed to load more:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Load more error:', error);
     }
+
+    setLoadingMore(false);
   }
 
+  // ❤️ Like (Optimistic UI)
   async function handleLike(postId: string) {
-    const item = feedItems.find(i =&gt; i.id === postId);
+    const item = items.find(i =&gt; i.id === postId);
+
     if (!item || item.type !== 'post') return;
 
     const isLiked = item.data.is_liked;
 
-    setFeedItems(
-      feedItems.map(i =&gt;
+    // تحديث فوري
+    setItems(prev =&gt;
+      prev.map(i =&gt;
         i.id === postId &amp;&amp; i.type === 'post'
           ? {
               ...i,
@@ -7313,9 +7457,11 @@ export function FeedContainer({ userId }: FeedContainerProps) {
         await likePost(postId, userId);
       }
     } catch (error) {
-      console.error('Failed to toggle like:', error);
-      setFeedItems(
-        feedItems.map(i =&gt;
+      console.error('Like error:', error);
+
+      // rollback
+      setItems(prev =&gt;
+        prev.map(i =&gt;
           i.id === postId &amp;&amp; i.type === 'post'
             ? {
                 ...i,
@@ -7331,70 +7477,111 @@ export function FeedContainer({ userId }: FeedContainerProps) {
     }
   }
 
-  async function handleComment(postId: string) {
-    console.log('Open comment modal for post:', postId);
+  // 💬 تعليق (placeholder)
+  function handleComment(postId: string) {
+    console.log('Comment on:', postId);
   }
 
+  // 📢 إعلان
   async function handleAdClick(adId: string) {
     try {
       await trackAdClick(adId, userId);
     } catch (error) {
-      console.error('Failed to track ad click:', error);
+      console.error('Ad click error:', error);
     }
   }
 
+  // 🔁 تغيير التبويب
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
   }
 
-  return (
-    &lt;div className="min-h-screen bg-background"&gt;
-      &lt;MainHeader /&gt;
+  return {
+    // data
+    items,
+    activeTab,
 
-      &lt;div className="pt-16 flex"&gt;
-        &lt;RightSidebar /&gt;
+    // state
+    loading,
+    loadingMore,
+    hasMore,
 
-        &lt;main className="flex-1 mr-80"&gt;
-          &lt;CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} /&gt;
-
-          &lt;div className="max-w-2xl mx-auto"&gt;
-            {isLoading &amp;&amp; feedItems.length === 0 ? (
-              &lt;div className="flex items-center justify-center py-12"&gt;
-                &lt;Loader2 className="h-8 w-8 animate-spin text-purple-600" /&gt;
-              &lt;/div&gt;
-            ) : feedItems.length === 0 ? (
-              &lt;div className="text-center py-12 px-4"&gt;
-                &lt;p className="text-muted-foreground"&gt;لا توجد منشورات&lt;/p&gt;
-              &lt;/div&gt;
-            ) : (
-              &lt;&gt;
-                {feedItems.map((item) =&gt; (
-                  &lt;FeedItem
-                    key={item.id}
-                    item={item}
-                    onLike={handleLike}
-                    onComment={handleComment}
-                    onAdClick={handleAdClick}
-                  /&gt;
-                ))}
-
-                {isLoading &amp;&amp; (
-                  &lt;div className="flex items-center justify-center py-8 border-b border-border/40"&gt;
-                    &lt;Loader2 className="h-6 w-6 animate-spin text-purple-600" /&gt;
-                  &lt;/div&gt;
-                )}
-              &lt;/&gt;
-            )}
-          &lt;/div&gt;
-        &lt;/main&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
+    // actions
+    loadMore,
+    handleLike,
+    handleComment,
+    handleAdClick,
+    handleTabChange,
+  };
 }
+]]>
+</file>
+</folder>
+<file path="features\feed\ii.pdf">
+<![CDATA[
 
 ]]>
 </file>
 </folder>
+<folder path="features\home">
+<file path="features\home\home-page.tsx">
+<![CDATA[
+'use client';
+
+import { HomeHeader } from './components/home-header';
+import { HomeTagline } from './components/home-tagline';
+import { HomeTabs } from './components/home-tabs';
+import { HomeFeed } from './components/home-feed';
+import { HomeSidebar } from './components/home-sidebar';
+
+import { useFeed } from '@/features/feed/hooks/use-feed';
+
+interface Props {
+  userId: string;
+}
+
+export function HomePage({ userId }: Props) {
+  const feed = useFeed({ userId });
+
+  return (
+    &lt;div className="min-h-screen bg-background"&gt;
+
+      &lt;HomeHeader /&gt;
+
+      &lt;HomeTagline /&gt;
+
+      &lt;div className="flex max-w-6xl mx-auto"&gt;
+
+        &lt;HomeSidebar /&gt;
+
+        &lt;main className="flex-1"&gt;
+          &lt;HomeTabs
+            activeTab={feed.activeTab}
+            onTabChange={feed.handleTabChange}
+          /&gt;
+
+          &lt;HomeFeed
+            items={feed.items}
+            loading={feed.loading}
+            loadingMore={feed.loadingMore}
+            onLike={feed.handleLike}
+            onComment={feed.handleComment}
+            onAdClick={feed.handleAdClick}
+          /&gt;
+        &lt;/main&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+]]>
+</file>
+</folder>
+<file path="features\ii.pdf">
+<![CDATA[
+
+]]>
+</file>
 </folder>
 <file path="FEATURES.md">
 <![CDATA[
@@ -8620,200 +8807,49 @@ The Ilham (استلهم) platform now includes:
 ]]>
 </file>
 <folder path="hooks">
+<file path="hooks\ii.pdf">
+<![CDATA[
+
+]]>
+</file>
 <file path="hooks\use-toast.ts">
 <![CDATA[
 'use client';
 
-// Inspired by react-hot-toast library
-import * as React from 'react';
+import { useState, ReactNode } from 'react';
 
-import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
-
-const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
-
-type ToasterToast = ToastProps &amp; {
+type Toast = {
   id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: ToastActionElement;
+  title?: string;
+  description?: string;
+  action?: ReactNode;
 };
 
-const actionTypes = {
-  ADD_TOAST: 'ADD_TOAST',
-  UPDATE_TOAST: 'UPDATE_TOAST',
-  DISMISS_TOAST: 'DISMISS_TOAST',
-  REMOVE_TOAST: 'REMOVE_TOAST',
-} as const;
+export function useToast() {
+  const [toasts, setToasts] = useState&lt;Toast[]&gt;([]);
 
-let count = 0;
+  function toast({
+    title,
+    description,
+    action,
+  }: Omit&lt;Toast, 'id'&gt;) {
+    const id = Math.random().toString();
 
-function genId() {
-  count = (count + 1) % Number.MAX_SAFE_INTEGER;
-  return count.toString();
-}
+    setToasts((prev) =&gt; [
+      ...prev,
+      { id, title, description, action },
+    ]);
 
-type ActionType = typeof actionTypes;
-
-type Action =
-  | {
-      type: ActionType['ADD_TOAST'];
-      toast: ToasterToast;
-    }
-  | {
-      type: ActionType['UPDATE_TOAST'];
-      toast: Partial&lt;ToasterToast&gt;;
-    }
-  | {
-      type: ActionType['DISMISS_TOAST'];
-      toastId?: ToasterToast['id'];
-    }
-  | {
-      type: ActionType['REMOVE_TOAST'];
-      toastId?: ToasterToast['id'];
-    };
-
-interface State {
-  toasts: ToasterToast[];
-}
-
-const toastTimeouts = new Map&lt;string, ReturnType&lt;typeof setTimeout&gt;&gt;();
-
-const addToRemoveQueue = (toastId: string) =&gt; {
-  if (toastTimeouts.has(toastId)) {
-    return;
+    setTimeout(() =&gt; {
+      setToasts((prev) =&gt; prev.filter((t) =&gt; t.id !== id));
+    }, 3000);
   }
 
-  const timeout = setTimeout(() =&gt; {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: 'REMOVE_TOAST',
-      toastId: toastId,
-    });
-  }, TOAST_REMOVE_DELAY);
-
-  toastTimeouts.set(toastId, timeout);
-};
-
-export const reducer = (state: State, action: Action): State =&gt; {
-  switch (action.type) {
-    case 'ADD_TOAST':
-      return {
-        ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
-      };
-
-    case 'UPDATE_TOAST':
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =&gt;
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
-        ),
-      };
-
-    case 'DISMISS_TOAST': {
-      const { toastId } = action;
-
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
-      if (toastId) {
-        addToRemoveQueue(toastId);
-      } else {
-        state.toasts.forEach((toast) =&gt; {
-          addToRemoveQueue(toast.id);
-        });
-      }
-
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =&gt;
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false,
-              }
-            : t
-        ),
-      };
-    }
-    case 'REMOVE_TOAST':
-      if (action.toastId === undefined) {
-        return {
-          ...state,
-          toasts: [],
-        };
-      }
-      return {
-        ...state,
-        toasts: state.toasts.filter((t) =&gt; t.id !== action.toastId),
-      };
-  }
-};
-
-const listeners: Array&lt;(state: State) =&gt; void&gt; = [];
-
-let memoryState: State = { toasts: [] };
-
-function dispatch(action: Action) {
-  memoryState = reducer(memoryState, action);
-  listeners.forEach((listener) =&gt; {
-    listener(memoryState);
-  });
-}
-
-type Toast = Omit&lt;ToasterToast, 'id'&gt;;
-
-function toast({ ...props }: Toast) {
-  const id = genId();
-
-  const update = (props: ToasterToast) =&gt;
-    dispatch({
-      type: 'UPDATE_TOAST',
-      toast: { ...props, id },
-    });
-  const dismiss = () =&gt; dispatch({ type: 'DISMISS_TOAST', toastId: id });
-
-  dispatch({
-    type: 'ADD_TOAST',
-    toast: {
-      ...props,
-      id,
-      open: true,
-      onOpenChange: (open) =&gt; {
-        if (!open) dismiss();
-      },
-    },
-  });
-
   return {
-    id: id,
-    dismiss,
-    update,
-  };
-}
-
-function useToast() {
-  const [state, setState] = React.useState&lt;State&gt;(memoryState);
-
-  React.useEffect(() =&gt; {
-    listeners.push(setState);
-    return () =&gt; {
-      const index = listeners.indexOf(setState);
-      if (index &gt; -1) {
-        listeners.splice(index, 1);
-      }
-    };
-  }, [state]);
-
-  return {
-    ...state,
     toast,
-    dismiss: (toastId?: string) =&gt; dispatch({ type: 'DISMISS_TOAST', toastId }),
+    toasts,
   };
 }
-
-export { useToast, toast };
-
 ]]>
 </file>
 </folder>
@@ -18751,6 +18787,36 @@ export async function deleteComment(commentId: string, userId: string): Promise&
   if (error) throw error;
 }
 
+]]>
+</file>
+<file path="services\posts.service.ts">
+<![CDATA[
+import { supabase } from '@/lib/supabase'
+
+export interface FeedParams {
+  limit?: number
+  cursor?: string | null
+}
+
+export async function getFeed({ limit = 10, cursor = null }: FeedParams) {
+  let query = supabase
+    .from('posts')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (cursor) {
+    query = query.lt('created_at', cursor)
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
 ]]>
 </file>
 <file path="services\user.service.ts">
